@@ -1,8 +1,4 @@
-use awqward_bomberman::system::{
-    input::{gamepad_system, keyboard_input_system},
-    scene::*,
-    setup,
-};
+use awqward_bomberman::system::{input::keyboard_input_system, scene::*, setup};
 
 use bevy::{prelude::*, DefaultPlugins};
 use color_eyre::Report;
@@ -17,7 +13,6 @@ fn main() -> Result<(), Report> {
         .add_startup_system(load_scene_system)
         .add_startup_system(setup::setup)
         .add_system(keyboard_input_system)
-        .add_system(gamepad_system)
         .run();
 
     Ok(())
