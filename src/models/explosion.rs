@@ -1,5 +1,6 @@
 use bevy::prelude::Component;
 
+#[derive(PartialEq)]
 pub enum ExplosionDirection {
     None,
     Up,

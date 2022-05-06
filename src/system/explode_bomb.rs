@@ -43,12 +43,12 @@ pub fn explode_bomb(
 
         if bomb.remaining_time <= 0.0 {
             use ExplosionDirection::*;
+            commands.entity(entity).despawn();
             commands.spawn()
                 .insert_bundle(ExplosionBundle::new(atlas.handle.clone(), *transform, [Up, Down, Left, Right]))
                 .insert(RigidBody::Dynamic)
-                .insert(Collider::cuboid(16.0, 16.0))
+                .insert(Collider::cuboid(6.0, 6.0))
                 .insert(Sensor(true));
-            commands.entity(entity).despawn();
         }
     }
 }

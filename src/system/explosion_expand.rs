@@ -10,8 +10,13 @@ use crate::models::explosion::ExplosionDirection;
 use crate::models::explosion::Explosion;
 use crate::system::explode_bomb::ExplosionBundle;
 
-pub fn explosion_expand(mut commands: Commands, atlas: Res<Atlas>, explosion_query: Query<(&Explosion, &Transform)>) {
-    for (explosion, transform) in explosion_query.iter() {
+pub fn explosion_expand(mut commands: Commands, atlas: Res<Atlas>, mut explosion_query: Query<(&mut Explosion, &Transform)>) {
+    for (mut explosion, transform) in explosion_query.iter_mut() {
+        use ExplosionDirection::*;
+        if explosion.1[0] == None && explosion.1[1] == None && explosion.1[2] == None && explosion.1[3] == None {
+            continue;
+        }
+
         for direction in explosion.1.iter() {
             use ExplosionDirection::*;
             match direction {
@@ -19,32 +24,34 @@ pub fn explosion_expand(mut commands: Commands, atlas: Res<Atlas>, explosion_que
                     commands.spawn()
                     .insert_bundle(ExplosionBundle::new(atlas.handle.clone(), transform.with_translation(Vec3::new(transform.translation.x, transform.translation.y + 16.0, 0.0)), [Up, None, None, None]))
                     .insert(RigidBody::Dynamic)
-                    .insert(Collider::cuboid(16.0, 16.0))
+                    .insert(Collider::cuboid(6.0, 6.0))
                     .insert(Sensor(true));
                 }
                 Down => {
                     commands.spawn()
                     .insert_bundle(ExplosionBundle::new(atlas.handle.clone(), transform.with_translation(Vec3::new(transform.translation.x, transform.translation.y - 16.0, 0.0)), [Down, None, None, None]))
                     .insert(RigidBody::Dynamic)
-                    .insert(Collider::cuboid(16.0, 16.0))
+                    .insert(Collider::cuboid(6.0, 6.0))
                     .insert(Sensor(true));
                 }
                 Left => {
                     commands.spawn()
                     .insert_bundle(ExplosionBundle::new(atlas.handle.clone(), transform.with_translation(Vec3::new(transform.translation.x - 16.0, transform.translation.y, 0.0)), [Left, None, None, None]))
                     .insert(RigidBody::Dynamic)
-                    .insert(Collider::cuboid(16.0, 16.0))
+                    .insert(Collider::cuboid(6.0, 6.0))
                     .insert(Sensor(true));
                 }
                 Right => {
                     commands.spawn()
                     .insert_bundle(ExplosionBundle::new(atlas.handle.clone(), transform.with_translation(Vec3::new(transform.translation.x + 16.0, transform.translation.y, 0.0)), [Right, None, None, None]))
                     .insert(RigidBody::Dynamic)
-                    .insert(Collider::cuboid(16.0, 16.0))
+                    .insert(Collider::cuboid(6.0, 6.0))
                     .insert(Sensor(true));
                 }
                 None => { /* Do nothing */ }
             }
         }
+        
+        explosion.1 = [None, None, None, None]
     }
 }
