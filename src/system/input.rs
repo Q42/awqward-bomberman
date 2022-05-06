@@ -1,6 +1,6 @@
 use bevy::{input::Axis, input::Input, prelude::*};
 
-use crate::models::player::Player;
+use crate::{models::player, TIME_STEP};
 
 struct Delta {
     x: f32,
@@ -9,7 +9,7 @@ struct Delta {
 
 pub fn keyboard_input_system(
     keyboard_input: Res<Input<KeyCode>>,
-    mut query: Query<&mut Transform, With<Player>>,
+    mut query: Query<&mut Transform, With<player::Player>>,
 ) {
     let mut delta = Delta { x: 0.0, y: 0.0 };
 
@@ -59,5 +59,9 @@ pub fn gamepad_system(
 }
 
 fn move_player(mut transform: Mut<'_, Transform>, delta: Delta) {
-    transform.translation += Vec3::new(delta.x, delta.y, 0.0);
+    transform.translation += Vec3::new(
+        delta.x * player::SPEED * TIME_STEP,
+        delta.y * player::SPEED * TIME_STEP,
+        0.0,
+    );
 }
