@@ -63,20 +63,22 @@ pub fn setup(
         }
     }
 
+    let player_sprite = SpriteBundle {
+        texture: asset_server.load("sprites/bomber_barbarian.png"),
+        transform: Transform {
+            scale: Vec3::new(0.1, 0.1, 1.0),
+            ..default()
+        },
+        ..default()
+    };
+
     commands.spawn_bundle(PlayerBundle {
         player: Player::One,
         input_manager: InputManagerBundle {
             input_map: PlayerBundle::input_map(Player::One),
             ..default()
         },
-        sprite: SpriteBundle {
-            texture: asset_server.load("sprites/bomber_barbarian.png"),
-            transform: Transform {
-                scale: Vec3::new(0.1, 0.1, 1.0),
-                ..default()
-            },
-            ..default()
-        },
-        collider: Collider
+        collider: Collider,
+        sprite: player_sprite,
     });
 }
