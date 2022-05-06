@@ -25,7 +25,7 @@ pub fn setup(
     mut rapier_config: ResMut<RapierConfiguration>,
 ) {
     let texture_handle = asset_server.load("sprites/atlas.png");
-    let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(16.0, 16.0), 3, 3);
+    let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(16.0, 16.0), 5, 2);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
     rapier_config.gravity = Vec2::ZERO;
@@ -56,7 +56,6 @@ pub fn setup(
                 ((row_index + 1) as f32 * (GRID_SIZE)) - (crate::WINDOW_HEIGHT / 2.0),
             );
 
-            // brick
             commands
                 .spawn()
                 .insert(Wall)
@@ -88,7 +87,7 @@ pub fn setup(
 fn spawn_player(mut commands: Commands, atlas: Handle<TextureAtlas>) {
     let player_sprite = SpriteSheetBundle {
         texture_atlas: atlas,
-        sprite: TextureAtlasSprite::new(0),
+        sprite: TextureAtlasSprite::new(6),
         transform: Transform {
             ..default()
         },
