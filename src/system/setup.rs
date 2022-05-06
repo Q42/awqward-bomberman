@@ -35,11 +35,11 @@ pub fn setup(mut commands: Commands, asset_server: Res<AssetServer>, mut texture
       [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
   ];
 
-  for (row_index, row) in level.iter().enumerate() {
+  for (row_index, row) in level.iter().copied().rev().enumerate() {
     for (column_index, column) in row.iter().enumerate() {
         let wall_position = Vec2::new(
-            0.0 + column_index as f32 * (16.0),
-            0.0 + row_index as f32 * (16.0),
+            column_index as f32 * (16.0),
+            row_index as f32 * (16.0),
         );
 
         // brick
