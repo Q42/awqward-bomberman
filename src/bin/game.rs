@@ -41,8 +41,8 @@ fn main() -> Result<(), Report> {
                 .with_system(move_player_system)
                 .with_system(explode_bomb)
                 .with_system(explosion_expand.after(explode_bomb))
-                .with_system(explosion_stop_expand.after(explosion_expand).after(explode_bomb))
-                .with_system(explosion_kill.after(explosion_expand).after(explode_bomb))
+                .with_system(explosion_stop_expand.after(explosion_expand))
+                .with_system(explosion_kill.after(explosion_expand))
                 .with_system(explosion_clear.after(explosion_stop_expand))
                 .with_system(place_bomb)
                 .with_system(end_game::end_game),
