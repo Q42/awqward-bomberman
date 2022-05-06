@@ -1,10 +1,8 @@
 use awqward_bomberman::{
     models::player::Action,
     system::{
-        end_game, explode_bomb::*, explode_bomb::*, explosion_clear::*, explosion_expand::*,
-        explosion_kill::*, explosion_kill::*, gamepad::gamepad_system, gamepad::gamepad_system,
-        movement::move_player_system, movement::move_player_system, place_bomb::*, place_bomb::*,
-        setup::*, setup::*,
+        end_game, explode_bomb::*, explosion_clear::*, explosion_expand::*, explosion_kill::*,
+        gamepad::gamepad_system, movement::move_player_system, place_bomb::*, setup::*,
     },
     TIME_STEP,
 };
