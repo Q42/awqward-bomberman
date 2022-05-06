@@ -1,4 +1,4 @@
-use crate::models::explosion::ExplosionCore;
+use crate::models::explosion::ExplosionDirection;
 use crate::models::{atlas::Atlas, explosion::Explosion};
 use crate::models::bomb::Bomb;
 use bevy::prelude::*;
@@ -13,9 +13,9 @@ pub struct ExplosionBundle {
 }
 
 impl ExplosionBundle {
-    pub fn new(atlas: Handle<TextureAtlas>, transform: Transform) -> ExplosionBundle {
+    pub fn new(atlas: Handle<TextureAtlas>, transform: Transform, directions: [ExplosionDirection; 4]) -> ExplosionBundle {
         ExplosionBundle {
-            explosion: Explosion,
+            explosion: Explosion(directions),
             sprite_sheet: {
                 SpriteSheetBundle {
                     texture_atlas: atlas,
@@ -42,9 +42,9 @@ pub fn explode_bomb(
         bomb.remaining_time -= time.delta().as_secs_f32();
 
         if bomb.remaining_time <= 0.0 {
+            use ExplosionDirection::*;
             commands.spawn()
-                .insert_bundle(ExplosionBundle::new(atlas.handle.clone(), *transform))
-                .insert(ExplosionCore)
+                .insert_bundle(ExplosionBundle::new(atlas.handle.clone(), *transform, [Up, Down, Left, Right]))
                 .insert(RigidBody::Dynamic)
                 .insert(Collider::cuboid(16.0, 16.0))
                 .insert(Sensor(true));

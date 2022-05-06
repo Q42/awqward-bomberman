@@ -2,7 +2,7 @@ use awqward_bomberman::{
     models::player::Action,
     system::{
         explode_bomb::*, gamepad::gamepad_system, movement::move_player_system, place_bomb::*,
-        setup::*, explosion_kill::*, explosion_expand::*,
+        setup::*, explosion_kill::*, explosion_expand::*, explosion_stop_expand::*
     },
     TIME_STEP,
 };
@@ -42,7 +42,8 @@ fn main() -> Result<(), Report> {
                 .with_system(explode_bomb)
                 .with_system(place_bomb)
                 .with_system(explosion_kill)
-                .with_system(explosion_expand),
+                .with_system(explosion_expand)
+                .with_system(explosion_stop_expand),
         )
         .add_system(gamepad_system)
         .run();

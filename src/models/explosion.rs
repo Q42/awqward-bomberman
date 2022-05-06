@@ -1,7 +1,12 @@
 use bevy::{prelude::*};
 
-#[derive(Component)]
-pub struct Explosion;
+pub enum ExplosionDirection {
+    None,
+    Up,
+    Right,
+    Down,
+    Left,
+}
 
 #[derive(Component)]
-pub struct ExplosionCore;
+pub struct Explosion(pub [ExplosionDirection; 4]);
