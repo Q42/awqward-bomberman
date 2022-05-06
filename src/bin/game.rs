@@ -13,6 +13,8 @@ use color_eyre::Report;
 use leafwing_input_manager::plugin::InputManagerPlugin;
 
 fn main() -> Result<(), Report> {
+    #[cfg(target_arch = "wasm32")]
+    console_error_panic_hook::set_once();
     color_eyre::install()?;
 
     App::new()

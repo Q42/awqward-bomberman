@@ -11,5 +11,6 @@ bevy = "0.7.0"
 bevy_math = "0.7.0"
 bevy_rapier2d = "0.13.2"
 color-eyre = { version = "0.6.1", default-features = false }
+console_error_panic_hook = "0.1.7"
 dotenv = "0.15.0"
 leafwing-input-manager = "0.3.0"

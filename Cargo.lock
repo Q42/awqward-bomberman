@@ -183,6 +183,7 @@ dependencies = [
  "bevy_math",
  "bevy_rapier2d",
  "color-eyre",
+ "console_error_panic_hook",
  "dotenv",
  "leafwing-input-manager",
 ]
