@@ -1,7 +1,7 @@
 use bevy::{prelude::*, sprite::Anchor};
 use bevy_rapier2d::{
     plugin::RapierConfiguration,
-    prelude::{Collider, RigidBody, Velocity, LockedAxes, Friction},
+    prelude::{Collider, Friction, LockedAxes, RigidBody, Velocity},
 };
 use leafwing_input_manager::InputManagerBundle;
 
@@ -58,26 +58,24 @@ pub fn setup(
 
             let mut environment = commands.spawn();
 
-            environment
-                .insert(Wall)
-                .insert_bundle(SpriteSheetBundle {
-                    texture_atlas: texture_atlas_handle.clone(),
-                    sprite: TextureAtlasSprite {
-                        index: *column,
-                        anchor: Anchor::Center,
-                        ..default()
-                    },
-                    transform: Transform {
-                        translation: wall_position.extend(0.0),
-                        ..default()
-                    },
+            environment.insert(Wall).insert_bundle(SpriteSheetBundle {
+                texture_atlas: texture_atlas_handle.clone(),
+                sprite: TextureAtlasSprite {
+                    index: *column,
+                    anchor: Anchor::Center,
                     ..default()
-                });
+                },
+                transform: Transform {
+                    translation: wall_position.extend(0.0),
+                    ..default()
+                },
+                ..default()
+            });
 
             if *column != G && *column != S {
                 environment
-                .insert(RigidBody::Fixed)
-                .insert(Collider::cuboid(8.0, 8.0));
+                    .insert(RigidBody::Fixed)
+                    .insert(Collider::cuboid(8.0, 8.0));
             }
         }
     }
@@ -93,9 +91,7 @@ fn spawn_player(mut commands: Commands, atlas: Handle<TextureAtlas>) {
     let player_sprite = SpriteSheetBundle {
         texture_atlas: atlas,
         sprite: TextureAtlasSprite::new(6),
-        transform: Transform {
-            ..default()
-        },
+        transform: Transform { ..default() },
         ..default()
     };
 

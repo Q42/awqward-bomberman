@@ -11,7 +11,7 @@ pub fn move_player_system(mut query: Query<(&ActionState<Action>, &mut Velocity)
     let (action_state, mut velocity) = query.single_mut();
 
     let mut delta = Vec2::new(0.0, 0.0);
-    
+
     if action_state.pressed(Action::Up) {
         delta.y += 1.0;
     }

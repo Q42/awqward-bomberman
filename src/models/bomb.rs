@@ -26,7 +26,7 @@ impl BombBundle {
                     texture_atlas: atlas,
                     sprite: TextureAtlasSprite {
                         index: 0,
-                        anchor: Anchor::BottomLeft,
+                        anchor: Anchor::Center,
                         ..default()
                     },
                     ..default()
