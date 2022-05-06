@@ -8,6 +8,8 @@ use leafwing_input_manager::{prelude::InputMap, Actionlike, InputManagerBundle};
 
 use crate::system::collision::Collider;
 
+pub const SPEED: f32 = 500.0;
+
 #[derive(Component)]
 pub enum Player {
     // Maps the player to a gamepad
@@ -19,7 +21,9 @@ pub enum Player {
 
 impl Player {
     pub fn iter() -> Iter<'static, Player> {
-        static PLAYERS: [Player; 4] = [Player::One, Player::Two, Player::Three, Player::Four];
+        use Player::*;
+
+        static PLAYERS: [Player; 4] = [One, Two, Three, Four];
         PLAYERS.iter()
     }
 }
