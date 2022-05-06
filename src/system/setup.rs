@@ -3,6 +3,8 @@ use leafwing_input_manager::InputManagerBundle;
 
 use crate::models::player::{Player, PlayerBundle};
 
+use super::collision::Collider;
+
 #[derive(Component)]
 struct Wall;
 
@@ -56,7 +58,8 @@ pub fn setup(
                         ..default()
                     },
                     ..default()
-                });
+                })
+                .insert(Collider);
         }
     }
 
@@ -74,5 +77,6 @@ pub fn setup(
             },
             ..default()
         },
+        collider: Collider
     });
 }

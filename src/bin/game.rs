@@ -1,6 +1,6 @@
 use awqward_bomberman::{
     models::player::Action,
-    system::{scene::*, setup},
+    system::{scene::*, setup, collision::{CollisionEvent, check_for_collisions}},
     TIME_STEP,
 };
 
@@ -19,6 +19,12 @@ fn main() -> Result<(), Report> {
         .add_startup_system(load_scene_system)
         .add_startup_system(setup::setup)
         .add_system_set(SystemSet::new().with_run_criteria(FixedTimestep::step(TIME_STEP as f64)))
+        .add_event::<CollisionEvent>()
+        .add_system_set(
+            SystemSet::new()
+                .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
+                .with_system(check_for_collisions)
+        )
         .run();
 
     Ok(())

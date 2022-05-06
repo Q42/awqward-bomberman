@@ -6,6 +6,8 @@ use bevy::{
 };
 use leafwing_input_manager::{prelude::InputMap, Actionlike, InputManagerBundle};
 
+use crate::system::collision::Collider;
+
 #[derive(Component)]
 pub enum Player {
     // Maps the player to a gamepad
@@ -29,6 +31,7 @@ pub struct PlayerBundle {
     pub input_manager: InputManagerBundle<Action>,
     #[bundle]
     pub sprite: SpriteBundle,
+    pub collider: Collider,
 }
 
 #[derive(Actionlike, Clone)]
