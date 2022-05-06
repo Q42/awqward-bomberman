@@ -1,9 +1,12 @@
-use bevy::prelude::*;
-use bevy_rapier2d::{plugin::RapierConfiguration, prelude::{RigidBody, Velocity, Collider}};
+use bevy::{prelude::*, sprite::Anchor};
+use bevy_rapier2d::{
+    plugin::RapierConfiguration,
+    prelude::{Collider, RigidBody, Velocity},
+};
 use leafwing_input_manager::InputManagerBundle;
 
 use crate::models::player::{Player, PlayerBundle};
-use crate::models::bomb::{BombBundle};
+use crate::{models::bomb::BombBundle, GRID_SIZE};
 
 #[derive(Component)]
 struct Wall;
@@ -48,7 +51,10 @@ pub fn setup(
 
     for (row_index, row) in level.iter().copied().rev().enumerate() {
         for (column_index, column) in row.iter().enumerate() {
-            let wall_position = Vec2::new(column_index as f32 * (16.0), row_index as f32 * (16.0));
+            let wall_position = Vec2::new(
+                ((column_index + 1) as f32 * (GRID_SIZE)) - (crate::WINDOW_WIDTH / 2.0),
+                ((row_index + 1) as f32 * (GRID_SIZE)) - (crate::WINDOW_HEIGHT / 2.0),
+            );
 
             // brick
             commands
@@ -56,7 +62,11 @@ pub fn setup(
                 .insert(Wall)
                 .insert_bundle(SpriteSheetBundle {
                     texture_atlas: texture_atlas_handle.clone(),
-                    sprite: TextureAtlasSprite::new(*column),
+                    sprite: TextureAtlasSprite {
+                        index: *column,
+                        anchor: Anchor::TopRight,
+                        ..default()
+                    },
                     transform: Transform {
                         translation: wall_position.extend(0.0),
                         ..default()
@@ -66,7 +76,9 @@ pub fn setup(
         }
     }
 
-    commands.spawn().insert_bundle(BombBundle::new(texture_atlas_handle));
+    commands
+        .spawn()
+        .insert_bundle(BombBundle::new(texture_atlas_handle));
 
     let player_sprite = SpriteBundle {
         texture: asset_server.load("sprites/bomber_barbarian.png"),
@@ -77,17 +89,16 @@ pub fn setup(
         ..default()
     };
 
-    let sprite_size = 16.0;
-    
-    commands.spawn_bundle(PlayerBundle {
-        player: Player::One,
-        input_manager: InputManagerBundle {
-            input_map: PlayerBundle::input_map(Player::One, None),
-            ..default()
-        },
-        sprite: player_sprite,
-    })
-    .insert(RigidBody::Dynamic)
-    .insert(Velocity::zero())
-    .insert(Collider::ball(sprite_size / 2.0));
+    commands
+        .spawn_bundle(PlayerBundle {
+            player: Player::One,
+            input_manager: InputManagerBundle {
+                input_map: PlayerBundle::input_map(Player::One, None),
+                ..default()
+            },
+            sprite: player_sprite,
+        })
+        .insert(RigidBody::Dynamic)
+        .insert(Velocity::zero())
+        .insert(Collider::ball(GRID_SIZE / 2.0));
 }
