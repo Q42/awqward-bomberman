@@ -1,13 +1,13 @@
-use bevy::{prelude::*, sprite::Anchor};
+use bevy::{ecs::system::EntityCommands, prelude::*, sprite::Anchor};
 use bevy_rapier2d::{
     plugin::RapierConfiguration,
     prelude::{Collider, Friction, LockedAxes, RigidBody, Velocity, ActiveEvents},
 };
 use leafwing_input_manager::InputManagerBundle;
 
+use crate::models::atlas::Atlas;
 use crate::models::player::{Player, PlayerBundle};
-use crate::models::atlas::{Atlas};
-use crate::{GRID_SIZE, E, S, W, G, PLAYER, LAYER_PLAYER};
+use crate::{E, G, GRID_SIZE, LAYER_PLAYER, PLAYER, S, W};
 
 #[derive(Component)]
 struct Wall;
@@ -25,7 +25,9 @@ pub fn setup(
     let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(16.0, 16.0), 9, 3);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
-    commands.insert_resource(Atlas { handle: texture_atlas_handle.clone() });
+    commands.insert_resource(Atlas {
+        handle: texture_atlas_handle.clone(),
+    });
 
     let level = [
         [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
@@ -76,25 +78,50 @@ pub fn setup(
         }
     }
 
-    spawn_player(commands, texture_atlas_handle)
+    spawn_player(
+        commands.spawn(),
+        texture_atlas_handle.clone(),
+        Player::One,
+        Vec2::new(
+            (GRID_SIZE * 2.0) - (crate::WINDOW_WIDTH / 2.0) - 8.0,
+            (GRID_SIZE * 2.0) - (crate::WINDOW_HEIGHT / 2.0) - 8.0,
+        ),
+    );
+    spawn_player(
+        commands.spawn(),
+        texture_atlas_handle,
+        Player::Two,
+        Vec2::new(
+            (crate::WINDOW_WIDTH / 2.0) - GRID_SIZE - 8.0,
+            (crate::WINDOW_HEIGHT / 2.0) - GRID_SIZE - 8.0,
+        ),
+    );
 }
 
-fn spawn_player(mut commands: Commands, atlas: Handle<TextureAtlas>) {
-    let player_sprite = SpriteSheetBundle {
+fn spawn_player(
+    mut commands: EntityCommands,
+    atlas: Handle<TextureAtlas>,
+    player: Player,
+    position: Vec2,
+) {
+    let sprite = SpriteSheetBundle {
         texture_atlas: atlas,
         sprite: TextureAtlasSprite::new(PLAYER),
-        transform: Transform { translation: Vec3::new(0.0, 0.0, LAYER_PLAYER), ..default() },
+        transform: Transform {
+            translation: position.extend(LAYER_PLAYER),
+            ..default()
+        },
         ..default()
     };
 
     commands
-        .spawn_bundle(PlayerBundle {
-            player: Player::One,
+        .insert_bundle(PlayerBundle {
+            player: player.clone(),
             input_manager: InputManagerBundle {
-                input_map: PlayerBundle::input_map(Player::One, None),
+                input_map: PlayerBundle::input_map(player, None),
                 ..default()
             },
-            sprite: player_sprite,
+            sprite,
         })
         .insert(RigidBody::Dynamic)
         .insert(LockedAxes::ROTATION_LOCKED)
