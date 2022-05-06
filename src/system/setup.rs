@@ -5,12 +5,12 @@ use bevy_rapier2d::{
 };
 use leafwing_input_manager::InputManagerBundle;
 
-use crate::models::atlas::Atlas;
+use crate::models::{atlas::Atlas, destructable::Destructable};
 use crate::models::player::{Player, PlayerBundle};
-use crate::{E, G, GRID_SIZE, LAYER_PLAYER, PLAYER, S, W};
+use crate::{E, G, GRID_SIZE, LAYER_PLAYER, PLAYER, S, W, D};
 
 #[derive(Component)]
-struct Wall;
+pub struct Wall;
 
 pub fn setup(
     mut commands: Commands,
@@ -31,32 +31,32 @@ pub fn setup(
 
     let level = [
         [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-        [E, S, S, S, S, S, S, S, S, S, S, S, S, S, E],
-        [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
-        [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
-        [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
-        [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
-        [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
-        [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
+        [E, S, D, S, D, D, D, S, D, D, S, S, D, S, E],
+        [E, D, W, D, W, D, W, D, W, G, W, D, W, G, E],
+        [E, D, S, G, S, D, S, D, D, D, D, D, S, D, E],
+        [E, D, W, D, W, G, W, D, W, D, W, G, W, G, E],
+        [E, G, D, D, D, G, D, D, S, G, D, D, D, D, E],
+        [E, D, W, D, W, G, W, D, W, D, W, D, W, G, E],
+        [E, G, D, D, S, D, D, G, D, D, S, G, S, D, E],
+        [E, D, W, G, W, D, W, G, W, D, W, D, W, D, E],
+        [E, G, D, D, S, G, S, D, D, G, S, D, S, D, E],
+        [E, D, W, D, W, D, W, G, W, D, W, G, W, G, E],
+        [E, D, D, G, D, G, S, D, D, G, S, D, S, D, E],
+        [E, G, W, D, W, G, W, G, W, G, W, G, W, D, E],
+        [E, G, S, D, D, G, D, G, S, D, D, G, D, G, E],
         [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
     ];
 
     for (row_index, row) in level.iter().copied().rev().enumerate() {
         for (column_index, column) in row.iter().enumerate() {
-            let wall_position = Vec2::new(
+            let environment_position = Vec2::new(
                 ((column_index) as f32 * (GRID_SIZE) + 8.0) - (crate::WINDOW_WIDTH / 2.0),
                 ((row_index) as f32 * (GRID_SIZE) + 8.0) - (crate::WINDOW_HEIGHT / 2.0),
             );
 
             let mut environment = commands.spawn();
 
-            environment.insert(Wall).insert_bundle(SpriteSheetBundle {
+            environment.insert_bundle(SpriteSheetBundle {
                 texture_atlas: texture_atlas_handle.clone(),
                 sprite: TextureAtlasSprite {
                     index: *column,
@@ -64,11 +64,15 @@ pub fn setup(
                     ..default()
                 },
                 transform: Transform {
-                    translation: wall_position.extend(0.0),
+                    translation: environment_position.extend(0.0),
                     ..default()
                 },
                 ..default()
             });
+
+            if *column == D {
+                environment.insert(Destructable);
+            }
 
             if *column != G && *column != S {
                 environment

@@ -1,7 +1,6 @@
 use bevy::prelude::Transform;
 use bevy::prelude::{Res, Query, Commands};
 use bevy_math::Vec3;
-use bevy_rapier2d::plugin::RapierContext;
 use bevy_rapier2d::prelude::Collider;
 use bevy_rapier2d::prelude::RigidBody;
 use bevy_rapier2d::prelude::Sensor;
@@ -11,9 +10,9 @@ use crate::models::explosion::ExplosionDirection;
 use crate::models::explosion::Explosion;
 use crate::system::explode_bomb::ExplosionBundle;
 
-pub fn explosion_expand(mut commands: Commands, atlas: Res<Atlas>, explosion_query: Query<(&Explosion, &Transform)>, rapier_context: Res<RapierContext>) {
+pub fn explosion_expand(mut commands: Commands, atlas: Res<Atlas>, explosion_query: Query<(&Explosion, &Transform)>) {
     for (explosion, transform) in explosion_query.iter() {
-        for direction in explosion.0.iter() {
+        for direction in explosion.1.iter() {
             use ExplosionDirection::*;
             match direction {
                 Up => {

@@ -8,7 +8,7 @@ use leafwing_input_manager::{prelude::InputMap, Actionlike, InputManagerBundle};
 
 pub const SPEED: f32 = 100.0;
 
-#[derive(Component, Clone)]
+#[derive(Component, Clone, Debug)]
 pub enum Player {
     // Maps the player to a gamepad
     One = 0,

@@ -1,0 +1,17 @@
+{
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug application",
+      "cargo": {
+        "args": ["build", "--bin=game"]
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}/../../",
+      "env": {
+        "CARGO_MANIFEST_DIR": "${workspaceFolder}"
+      }
+    }
+  ]
+}

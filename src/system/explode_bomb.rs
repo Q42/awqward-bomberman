@@ -15,7 +15,7 @@ pub struct ExplosionBundle {
 impl ExplosionBundle {
     pub fn new(atlas: Handle<TextureAtlas>, transform: Transform, directions: [ExplosionDirection; 4]) -> ExplosionBundle {
         ExplosionBundle {
-            explosion: Explosion(directions),
+            explosion: Explosion(2.0, directions),
             sprite_sheet: {
                 SpriteSheetBundle {
                     texture_atlas: atlas,

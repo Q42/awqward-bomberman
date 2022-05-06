@@ -1,4 +1,4 @@
-use bevy::{prelude::*};
+use bevy::prelude::Component;
 
 pub enum ExplosionDirection {
     None,
@@ -9,4 +9,4 @@ pub enum ExplosionDirection {
 }
 
 #[derive(Component)]
-pub struct Explosion(pub [ExplosionDirection; 4]);
+pub struct Explosion(pub f32, pub [ExplosionDirection; 4]);
