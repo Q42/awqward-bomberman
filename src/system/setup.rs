@@ -1,13 +1,13 @@
-use bevy::{prelude::*, sprite::Anchor};
+use bevy::{ecs::system::EntityCommands, prelude::*, sprite::Anchor};
 use bevy_rapier2d::{
     plugin::RapierConfiguration,
     prelude::{Collider, Friction, LockedAxes, RigidBody, Velocity},
 };
 use leafwing_input_manager::InputManagerBundle;
 
+use crate::models::atlas::Atlas;
 use crate::models::player::{Player, PlayerBundle};
-use crate::models::atlas::{Atlas};
-use crate::{GRID_SIZE, E, S, W, G, PLAYER, LAYER_PLAYER};
+use crate::{E, G, GRID_SIZE, LAYER_PLAYER, PLAYER, S, W};
 
 #[derive(Component)]
 struct Wall;
@@ -25,7 +25,9 @@ pub fn setup(
     let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(16.0, 16.0), 9, 3);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
-    commands.insert_resource(Atlas { handle: texture_atlas_handle.clone() });
+    commands.insert_resource(Atlas {
+        handle: texture_atlas_handle.clone(),
+    });
 
     let level = [
         [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
@@ -76,22 +78,26 @@ pub fn setup(
         }
     }
 
-    spawn_player(commands, texture_atlas_handle)
+    spawn_player(commands.spawn(), texture_atlas_handle.clone(), Player::One);
+    spawn_player(commands.spawn(), texture_atlas_handle, Player::Two);
 }
 
-fn spawn_player(mut commands: Commands, atlas: Handle<TextureAtlas>) {
+fn spawn_player(mut commands: EntityCommands, atlas: Handle<TextureAtlas>, player: Player) {
     let player_sprite = SpriteSheetBundle {
         texture_atlas: atlas,
         sprite: TextureAtlasSprite::new(PLAYER),
-        transform: Transform { translation: Vec3::new(0.0, 0.0, LAYER_PLAYER), ..default() },
+        transform: Transform {
+            translation: Vec3::new(0.0, 0.0, LAYER_PLAYER),
+            ..default()
+        },
         ..default()
     };
 
     commands
-        .spawn_bundle(PlayerBundle {
-            player: Player::One,
+        .insert_bundle(PlayerBundle {
+            player: player.clone(),
             input_manager: InputManagerBundle {
-                input_map: PlayerBundle::input_map(Player::One, None),
+                input_map: PlayerBundle::input_map(player, None),
                 ..default()
             },
             sprite: player_sprite,
