@@ -4,6 +4,7 @@
     "mikestead.dotenv",
     "editorconfig.editorconfig",
     "usernamehw.errorlens",
-    "matklad.rust-analyzer"
+    "matklad.rust-analyzer",
+    "vadimcn.vscode-lldb"
   ]
 }

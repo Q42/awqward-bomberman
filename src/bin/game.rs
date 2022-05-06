@@ -1,8 +1,8 @@
 use awqward_bomberman::{
     models::player::Action,
     system::{
-        explode_bomb::*, gamepad::gamepad_system, movement::move_player_system, place_bomb::*,
-        setup::*, explosion_kill::*, explosion_clear::*, explosion_expand::*
+        end_game, explode_bomb::*, explosion_clear::*, explosion_expand::*, explosion_kill::*,
+        gamepad::gamepad_system, movement::move_player_system, place_bomb::*, setup::*,
     },
     TIME_STEP,
 };
@@ -40,10 +40,11 @@ fn main() -> Result<(), Report> {
                 .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
                 .with_system(move_player_system)
                 .with_system(explode_bomb)
-                .with_system(place_bomb)
                 .with_system(explosion_kill)
                 .with_system(explosion_expand)
-                .with_system(explosion_clear),
+                .with_system(explosion_clear)
+                .with_system(place_bomb)
+                .with_system(end_game::end_game),
         )
         .add_system(gamepad_system)
         .run();
