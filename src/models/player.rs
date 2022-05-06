@@ -2,7 +2,7 @@ use std::slice::Iter;
 
 use bevy::{
     prelude::{Bundle, Component, Gamepad, GamepadButtonType, KeyCode},
-    sprite::SpriteBundle,
+    sprite::SpriteSheetBundle,
 };
 use leafwing_input_manager::{prelude::InputMap, Actionlike, InputManagerBundle};
 
@@ -32,7 +32,7 @@ pub struct PlayerBundle {
     #[bundle]
     pub input_manager: InputManagerBundle<Action>,
     #[bundle]
-    pub sprite: SpriteBundle,
+    pub sprite: SpriteSheetBundle,
 }
 
 #[derive(Actionlike, Clone)]

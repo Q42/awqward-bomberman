@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_rapier2d::{plugin::RapierConfiguration, prelude::{RigidBody, Velocity, Collider}};
+use bevy_rapier2d::{plugin::RapierConfiguration, prelude::{RigidBody, Velocity, Collider, LockedAxes}};
 use leafwing_input_manager::InputManagerBundle;
 
 use crate::models::player::{Player, PlayerBundle};
@@ -60,22 +60,26 @@ pub fn setup(
                         ..default()
                     },
                     ..default()
-                });
+                })
+                .insert(RigidBody::Fixed)
+                .insert(Collider::cuboid(16.0, 16.0));
         }
     }
 
-    commands.spawn().insert_bundle(BombBundle::new(texture_atlas_handle));
+    commands.spawn().insert_bundle(BombBundle::new(texture_atlas_handle.clone()));
 
-    let player_sprite = SpriteBundle {
-        texture: asset_server.load("sprites/bomber_barbarian.png"),
+    spawn_player(commands, texture_atlas_handle)
+}
+
+fn spawn_player(mut commands: Commands, atlas: Handle<TextureAtlas>) {
+    let player_sprite = SpriteSheetBundle {
+        texture_atlas: atlas,
+        sprite: TextureAtlasSprite::new(0),
         transform: Transform {
-            scale: Vec3::new(0.1, 0.1, 1.0),
             ..default()
         },
         ..default()
     };
-
-    let sprite_size = 16.0;
     
     commands.spawn_bundle(PlayerBundle {
         player: Player::One,
@@ -85,7 +89,8 @@ pub fn setup(
         },
         sprite: player_sprite,
     })
-    .insert(RigidBody::Dynamic)
+    .insert(RigidBody::Fixed)
+    .insert(LockedAxes::ROTATION_LOCKED)
     .insert(Velocity::zero())
-    .insert(Collider::ball(sprite_size / 2.0));
+    .insert(Collider::cuboid(16.0, 16.0));
 }
