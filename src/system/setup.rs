@@ -10,16 +10,18 @@ use super::collision::Collider;
 struct Wall;
 
 const E: usize = 0; // Edge
-const G: usize = 7; // Grass
-const S: usize = 4; // Shaded grass
-const W: usize = 8; // Wall
+const W: usize = 1; // Wall
+const G: usize = 2; // Grass
+const S: usize = 3; // Shaded grass
+
+const BOMB: usize = 4;
 
 pub fn setup(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
 ) {
-    let texture_handle = asset_server.load("sprites/stage.png");
+    let texture_handle = asset_server.load("sprites/atlas.png");
     let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(16.0, 16.0), 3, 3);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
@@ -29,17 +31,17 @@ pub fn setup(
         [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
         [E, S, S, S, S, S, S, S, S, S, S, S, S, S, E],
         [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, G, G, G, G, G, G, G, G, G, G, G, G, E],
+        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
         [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, G, G, G, G, G, G, G, G, G, G, G, G, E],
+        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
         [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, G, G, G, G, G, G, G, G, G, G, G, G, E],
+        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
         [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, G, G, G, G, G, G, G, G, G, G, G, G, E],
+        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
         [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, G, G, G, G, G, G, G, G, G, G, G, G, E],
+        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
         [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, G, G, G, G, G, G, G, G, G, G, G, G, E],
+        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
         [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
     ];
 

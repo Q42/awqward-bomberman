@@ -22,7 +22,7 @@ impl BombBundle {
       sprite_sheet: {
         SpriteSheetBundle {
             texture_atlas: atlas,
-            sprite: TextureAtlasSprite::new(0),
+            sprite: TextureAtlasSprite::new(4),
             ..default()
         }
       }
