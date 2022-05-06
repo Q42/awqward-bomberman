@@ -1,7 +1,7 @@
 use bevy::{prelude::*, sprite::Anchor};
 use bevy_rapier2d::{
     plugin::RapierConfiguration,
-    prelude::{Collider, Friction, LockedAxes, RigidBody, Velocity},
+    prelude::{Collider, Friction, LockedAxes, RigidBody, Velocity, ActiveEvents},
 };
 use leafwing_input_manager::InputManagerBundle;
 
@@ -100,5 +100,6 @@ fn spawn_player(mut commands: Commands, atlas: Handle<TextureAtlas>) {
         .insert(LockedAxes::ROTATION_LOCKED)
         .insert(Velocity::zero())
         .insert(Friction::coefficient(0.0))
-        .insert(Collider::ball(8.0));
+        .insert(Collider::ball(8.0))
+        .insert(ActiveEvents::COLLISION_EVENTS);
 }

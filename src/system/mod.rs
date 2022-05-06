@@ -3,3 +3,4 @@ pub mod gamepad;
 pub mod movement;
 pub mod setup;
 pub mod place_bomb;
+pub mod explosion_kill;

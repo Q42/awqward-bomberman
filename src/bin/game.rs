@@ -2,7 +2,7 @@ use awqward_bomberman::{
     models::player::Action,
     system::{
         explode_bomb::*, gamepad::gamepad_system, movement::move_player_system, place_bomb::*,
-        setup::*,
+        setup::*, explosion_kill::*,
     },
     TIME_STEP,
 };
@@ -30,7 +30,7 @@ fn main() -> Result<(), Report> {
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(
             awqward_bomberman::GRID_SIZE,
         ))
-        // .add_plugin(RapierDebugRenderPlugin::default())
+        .add_plugin(RapierDebugRenderPlugin::default())
         .add_startup_system(setup)
         .add_event::<CollisionEvent>()
         .add_system_set(
@@ -40,6 +40,7 @@ fn main() -> Result<(), Report> {
                 .with_system(explode_bomb)
                 .with_system(place_bomb),
         )
+        .add_system(explosion_kill)
         .add_system(gamepad_system)
         .run();
 
