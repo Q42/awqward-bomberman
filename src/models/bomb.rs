@@ -16,7 +16,7 @@ pub struct BombBundle {
 }
 
 impl BombBundle {
-    pub fn new(atlas: Handle<TextureAtlas>) -> BombBundle {
+    pub fn new(atlas: Handle<TextureAtlas>, transform: Transform) -> BombBundle {
         BombBundle {
             bomb: Bomb {
                 remaining_time: INIT_REMAINING_TIME,
@@ -25,10 +25,11 @@ impl BombBundle {
                 SpriteSheetBundle {
                     texture_atlas: atlas,
                     sprite: TextureAtlasSprite {
-                        index: 0,
+                        index: 4,
                         anchor: Anchor::Center,
                         ..default()
                     },
+                    transform,
                     ..default()
                 }
             },

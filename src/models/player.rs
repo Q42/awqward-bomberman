@@ -41,6 +41,7 @@ pub enum Action {
     Right,
     Down,
     Left,
+    PlaceBomb
 }
 
 impl PlayerBundle {
@@ -52,6 +53,7 @@ impl PlayerBundle {
                     (Action::Right, KeyCode::D),
                     (Action::Up, KeyCode::W),
                     (Action::Down, KeyCode::S),
+                    (Action::PlaceBomb, KeyCode::Space)
                 ])
                 .set_gamepad(Gamepad(player as usize))
                 .build()
@@ -65,6 +67,7 @@ impl PlayerBundle {
             (Action::Right, GamepadButtonType::DPadRight),
             (Action::Up, GamepadButtonType::DPadUp),
             (Action::Down, GamepadButtonType::DPadDown),
+            (Action::PlaceBomb, GamepadButtonType::South),
         ]);
 
         input_map

@@ -1,6 +1,11 @@
 use awqward_bomberman::{
     models::player::Action,
-    system::{explode_bomb::*, movement::move_player_system, setup::*},
+    system::{
+        movement::move_player_system,
+        setup::*,
+        explode_bomb::*,
+        place_bomb::*
+    },
     TIME_STEP,
 };
 
@@ -11,6 +16,7 @@ use leafwing_input_manager::plugin::InputManagerPlugin;
 
 fn main() -> Result<(), Report> {
     color_eyre::install()?;
+
 
     App::new()
         .insert_resource(WindowDescriptor {
@@ -34,7 +40,8 @@ fn main() -> Result<(), Report> {
             SystemSet::new()
                 .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
                 .with_system(move_player_system)
-                .with_system(explode_bomb),
+                .with_system(explode_bomb)
+                .with_system(place_bomb)
         )
         .run();
 

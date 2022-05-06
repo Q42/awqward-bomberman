@@ -7,6 +7,7 @@ use leafwing_input_manager::InputManagerBundle;
 
 use crate::models::player::{Player, PlayerBundle};
 use crate::{models::bomb::BombBundle, GRID_SIZE};
+use crate::models::atlas::{Atlas};
 
 #[derive(Component)]
 struct Wall;
@@ -24,12 +25,14 @@ pub fn setup(
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
     mut rapier_config: ResMut<RapierConfiguration>,
 ) {
+    rapier_config.gravity = Vec2::ZERO;
+    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+
     let texture_handle = asset_server.load("sprites/atlas.png");
     let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(16.0, 16.0), 5, 2);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
-    rapier_config.gravity = Vec2::ZERO;
-    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+    commands.insert_resource(Atlas { handle: texture_atlas_handle.clone() });
 
     let level = [
         [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
@@ -79,10 +82,6 @@ pub fn setup(
             }
         }
     }
-
-    commands
-        .spawn()
-        .insert_bundle(BombBundle::new(texture_atlas_handle.clone()));
 
     spawn_player(commands, texture_atlas_handle)
 }
