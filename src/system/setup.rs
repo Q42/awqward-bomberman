@@ -1,7 +1,7 @@
 use bevy::{prelude::*, sprite::Anchor};
 use bevy_rapier2d::{
     plugin::RapierConfiguration,
-    prelude::{Collider, RigidBody, Velocity, LockedAxes},
+    prelude::{Collider, RigidBody, Velocity, LockedAxes, Friction},
 };
 use leafwing_input_manager::InputManagerBundle;
 
@@ -13,8 +13,8 @@ struct Wall;
 
 const E: usize = 0; // Edge
 const W: usize = 1; // Wall
-const G: usize = 2; // Grass
-const S: usize = 3; // Shaded grass
+const S: usize = 2; // Shaded grass
+const G: usize = 3; // Grass
 
 const BOMB: usize = 4;
 
@@ -56,14 +56,15 @@ pub fn setup(
                 ((row_index + 1) as f32 * (GRID_SIZE)) - (crate::WINDOW_HEIGHT / 2.0),
             );
 
-            commands
-                .spawn()
+            let mut environment = commands.spawn();
+
+            environment
                 .insert(Wall)
                 .insert_bundle(SpriteSheetBundle {
                     texture_atlas: texture_atlas_handle.clone(),
                     sprite: TextureAtlasSprite {
                         index: *column,
-                        anchor: Anchor::TopRight,
+                        anchor: Anchor::Center,
                         ..default()
                     },
                     transform: Transform {
@@ -71,9 +72,13 @@ pub fn setup(
                         ..default()
                     },
                     ..default()
-                })
+                });
+
+            if *column != G && *column != S {
+                environment
                 .insert(RigidBody::Fixed)
-                .insert(Collider::cuboid(16.0, 16.0));
+                .insert(Collider::cuboid(8.0, 8.0));
+            }
         }
     }
 
@@ -106,5 +111,6 @@ fn spawn_player(mut commands: Commands, atlas: Handle<TextureAtlas>) {
         .insert(RigidBody::Dynamic)
         .insert(LockedAxes::ROTATION_LOCKED)
         .insert(Velocity::zero())
-        .insert(Collider::ball(GRID_SIZE / 2.0));
+        .insert(Friction::coefficient(0.0))
+        .insert(Collider::ball(8.0));
 }
