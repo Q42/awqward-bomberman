@@ -90,7 +90,7 @@ pub fn setup(
 fn spawn_player(mut commands: Commands, atlas: Handle<TextureAtlas>) {
     let player_sprite = SpriteSheetBundle {
         texture_atlas: atlas,
-        sprite: TextureAtlasSprite::new(6),
+        sprite: TextureAtlasSprite::new(5),
         transform: Transform { ..default() },
         ..default()
     };

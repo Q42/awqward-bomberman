@@ -27,7 +27,7 @@ fn main() -> Result<(), Report> {
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(
             awqward_bomberman::GRID_SIZE,
         ))
-        .add_plugin(RapierDebugRenderPlugin::default())
+        // .add_plugin(RapierDebugRenderPlugin::default())
         .add_startup_system(setup)
         .add_event::<CollisionEvent>()
         .add_system_set(
