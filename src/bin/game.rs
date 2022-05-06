@@ -9,9 +9,18 @@ fn main() -> Result<(), Report> {
         .add_plugins(DefaultPlugins)
         .add_startup_system(save_scene_system.exclusive_system())
         .add_startup_system(load_scene_system)
+        .add_startup_system(setup)
         .run();
 
     Ok(())
+}
+
+fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+    commands.spawn_bundle(SpriteBundle {
+        texture: asset_server.load("sprites/bomberman.png"),
+        ..default()
+    });
 }
 
 fn load_scene_system(asset_server: Res<AssetServer>, mut scene_spawner: ResMut<SceneSpawner>) {
