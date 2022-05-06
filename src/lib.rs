@@ -14,6 +14,7 @@ pub const E: usize = 0; // Edge
 pub const W: usize = 1; // Wall
 pub const S: usize = 2; // Shaded grass
 pub const G: usize = 3; // Grass
+pub const D: usize = 5; // Destructable
 pub const BOMB: usize = 4;
 pub const PLAYER: usize = 9;
 
