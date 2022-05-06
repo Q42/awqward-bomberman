@@ -1,14 +1,9 @@
-use crate::models::atlas::Atlas;
+use crate::models::explosion::ExplosionCore;
+use crate::models::{atlas::Atlas, explosion::Explosion};
 use crate::models::bomb::Bomb;
 use bevy::prelude::*;
 use bevy::sprite::Anchor;
 use bevy_rapier2d::prelude::{RigidBody, Collider, Sensor};
-
-#[derive(Component)]
-pub struct Explosion;
-
-#[derive(Component)]
-pub struct ExplosionCore;
 
 #[derive(Bundle)]
 pub struct ExplosionBundle {
