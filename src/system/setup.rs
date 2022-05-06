@@ -1,9 +1,8 @@
 use bevy::prelude::*;
+use bevy_rapier2d::{plugin::RapierConfiguration, prelude::{RigidBody, Velocity, Collider}};
 use leafwing_input_manager::InputManagerBundle;
 
 use crate::models::player::{Player, PlayerBundle};
-
-use super::collision::Collider;
 
 #[derive(Component)]
 struct Wall;
@@ -17,11 +16,13 @@ pub fn setup(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+    mut rapier_config: ResMut<RapierConfiguration>,
 ) {
     let texture_handle = asset_server.load("sprites/stage.png");
     let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(16.0, 16.0), 3, 3);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
+    rapier_config.gravity = Vec2::ZERO;
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
 
     let level = [
@@ -58,8 +59,7 @@ pub fn setup(
                         ..default()
                     },
                     ..default()
-                })
-                .insert(Collider);
+                });
         }
     }
 
@@ -72,13 +72,17 @@ pub fn setup(
         ..default()
     };
 
+    let sprite_size = 16.0;
+    
     commands.spawn_bundle(PlayerBundle {
         player: Player::One,
         input_manager: InputManagerBundle {
             input_map: PlayerBundle::input_map(Player::One),
             ..default()
         },
-        collider: Collider,
         sprite: player_sprite,
-    });
+    })
+    .insert(RigidBody::Dynamic)
+    .insert(Velocity::zero())
+    .insert(Collider::ball(sprite_size / 2.0));
 }

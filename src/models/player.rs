@@ -6,8 +6,6 @@ use bevy::{
 };
 use leafwing_input_manager::{prelude::InputMap, Actionlike, InputManagerBundle};
 
-use crate::system::collision::Collider;
-
 pub const SPEED: f32 = 500.0;
 
 #[derive(Component)]
@@ -35,7 +33,6 @@ pub struct PlayerBundle {
     pub input_manager: InputManagerBundle<Action>,
     #[bundle]
     pub sprite: SpriteBundle,
-    pub collider: Collider,
 }
 
 #[derive(Actionlike, Clone)]
