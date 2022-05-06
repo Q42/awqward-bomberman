@@ -1,5 +1,7 @@
 use bevy::{prelude::*};
 
+use crate::models::player::Player;
+
 #[derive(Component)]
 struct Wall;
 
@@ -36,6 +38,16 @@ pub fn setup(mut commands: Commands, asset_server: Res<AssetServer>, mut texture
             },
             ..default()
           });
-    }
-}
+      }
+  }
+
+  // Player 1
+  commands.spawn().insert(Player).insert_bundle(SpriteBundle {
+    texture: asset_server.load("sprites/bomber_barbarian.png"),
+    transform: Transform {
+        scale: Vec3::new(0.1, 0.1, 1.0),
+        ..default()
+    },
+    ..default()
+  });
 }
