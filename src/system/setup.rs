@@ -52,8 +52,8 @@ pub fn setup(
     for (row_index, row) in level.iter().copied().rev().enumerate() {
         for (column_index, column) in row.iter().enumerate() {
             let wall_position = Vec2::new(
-                ((column_index + 1) as f32 * (GRID_SIZE)) - (crate::WINDOW_WIDTH / 2.0),
-                ((row_index + 1) as f32 * (GRID_SIZE)) - (crate::WINDOW_HEIGHT / 2.0),
+                ((column_index) as f32 * (GRID_SIZE) + 8.0) - (crate::WINDOW_WIDTH / 2.0),
+                ((row_index) as f32 * (GRID_SIZE) + 8.0) - (crate::WINDOW_HEIGHT / 2.0),
             );
 
             let mut environment = commands.spawn();
