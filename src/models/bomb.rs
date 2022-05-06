@@ -29,10 +29,16 @@ impl BombBundle {
                         anchor: Anchor::Center,
                         ..default()
                     },
-                    transform,
+                    transform: round_transform_to_nearest_multiple_of(16.0, transform),
                     ..default()
                 }
             },
         }
     }
+}
+
+fn round_transform_to_nearest_multiple_of(multiple: f32, transform: Transform) -> Transform {
+    let x = ((transform.translation.x - 8.0) / multiple).ceil() * multiple;
+    let y = ((transform.translation.y - 8.0) / multiple).ceil() * multiple;
+    Transform::from_translation(Vec3::new(x, y, 0.0))
 }
