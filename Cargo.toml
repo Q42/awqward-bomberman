@@ -11,3 +11,4 @@ bevy = "0.7.0"
 bevy_math = "0.7.0"
 color-eyre = { version = "0.6.1", default-features = false }
 dotenv = "0.15.0"
+leafwing-input-manager = "0.3.0"
