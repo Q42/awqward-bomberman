@@ -76,6 +76,7 @@ pub fn setup(
 
             if *column != G && *column != S {
                 environment
+                    .insert(Wall)
                     .insert(RigidBody::Fixed)
                     .insert(Collider::cuboid(8.0, 8.0));
             }
