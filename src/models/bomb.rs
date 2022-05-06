@@ -1,4 +1,5 @@
 use bevy::{prelude::*, sprite::Anchor};
+use crate::{BOMB, LAYER_ITEMS};
 
 const INIT_REMAINING_TIME: f32 = 5.0;
 
@@ -25,11 +26,14 @@ impl BombBundle {
                 SpriteSheetBundle {
                     texture_atlas: atlas,
                     sprite: TextureAtlasSprite {
-                        index: 4,
+                        index: BOMB,
                         anchor: Anchor::Center,
                         ..default()
                     },
-                    transform: round_transform_to_nearest_multiple_of(16.0, transform),
+                    transform: Transform {
+                        translation: round_transform_to_nearest_multiple_of(16.0, transform.translation),
+                        ..transform
+                    },
                     ..default()
                 }
             },
@@ -37,8 +41,8 @@ impl BombBundle {
     }
 }
 
-fn round_transform_to_nearest_multiple_of(multiple: f32, transform: Transform) -> Transform {
-    let x = ((transform.translation.x - 8.0) / multiple).ceil() * multiple;
-    let y = ((transform.translation.y - 8.0) / multiple).ceil() * multiple;
-    Transform::from_translation(Vec3::new(x, y, 0.0))
+fn round_transform_to_nearest_multiple_of(multiple: f32, translation: Vec3) -> Vec3 {
+    let x = ((translation.x - 8.0) / multiple).ceil() * multiple;
+    let y = ((translation.y - 8.0) / multiple).ceil() * multiple;
+    Vec3::new(x, y, LAYER_ITEMS)
 }

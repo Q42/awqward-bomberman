@@ -6,18 +6,11 @@ use bevy_rapier2d::{
 use leafwing_input_manager::InputManagerBundle;
 
 use crate::models::player::{Player, PlayerBundle};
-use crate::{models::bomb::BombBundle, GRID_SIZE};
 use crate::models::atlas::{Atlas};
+use crate::{GRID_SIZE, E, S, W, G, LAYER_PLAYER};
 
 #[derive(Component)]
 struct Wall;
-
-const E: usize = 0; // Edge
-const W: usize = 1; // Wall
-const S: usize = 2; // Shaded grass
-const G: usize = 3; // Grass
-
-const BOMB: usize = 4;
 
 pub fn setup(
     mut commands: Commands,
@@ -90,7 +83,7 @@ fn spawn_player(mut commands: Commands, atlas: Handle<TextureAtlas>) {
     let player_sprite = SpriteSheetBundle {
         texture_atlas: atlas,
         sprite: TextureAtlasSprite::new(5),
-        transform: Transform { ..default() },
+        transform: Transform { translation: Vec3::new(0.0, 0.0, LAYER_PLAYER), ..default() },
         ..default()
     };
 
