@@ -3,6 +3,7 @@ use bevy_rapier2d::{plugin::RapierConfiguration, prelude::{RigidBody, Velocity, 
 use leafwing_input_manager::InputManagerBundle;
 
 use crate::models::player::{Player, PlayerBundle};
+use crate::models::bomb::{BombBundle};
 
 #[derive(Component)]
 struct Wall;
@@ -63,6 +64,8 @@ pub fn setup(
         }
     }
 
+    commands.spawn().insert_bundle(BombBundle::new(texture_atlas_handle));
+
     let player_sprite = SpriteBundle {
         texture: asset_server.load("sprites/bomber_barbarian.png"),
         transform: Transform {
@@ -77,7 +80,7 @@ pub fn setup(
     commands.spawn_bundle(PlayerBundle {
         player: Player::One,
         input_manager: InputManagerBundle {
-            input_map: PlayerBundle::input_map(Player::One),
+            input_map: PlayerBundle::input_map(Player::One, None),
             ..default()
         },
         sprite: player_sprite,

@@ -44,15 +44,20 @@ pub enum Action {
 }
 
 impl PlayerBundle {
-    pub fn input_map(player: Player) -> InputMap<Action> {
-        let mut input_map = InputMap::new([
-            (Action::Left, KeyCode::A),
-            (Action::Right, KeyCode::D),
-            (Action::Up, KeyCode::W),
-            (Action::Down, KeyCode::S),
-        ])
-        .set_gamepad(Gamepad(player as usize))
-        .build();
+    pub fn input_map(player: Player, gamepad: Option<Gamepad>) -> InputMap<Action> {
+        let mut input_map = gamepad.map_or_else(
+            || {
+                InputMap::new([
+                    (Action::Left, KeyCode::A),
+                    (Action::Right, KeyCode::D),
+                    (Action::Up, KeyCode::W),
+                    (Action::Down, KeyCode::S),
+                ])
+                .set_gamepad(Gamepad(player as usize))
+                .build()
+            },
+            |gamepad| InputMap::default().set_gamepad(gamepad).build(),
+        );
 
         // Each player will use the same gamepad controls, but on seperate gamepads
         input_map.insert_multiple([
