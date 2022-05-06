@@ -1,11 +1,6 @@
 use awqward_bomberman::{
     models::player::Action,
-    system::{
-        movement::move_player_system,
-        scene::*,
-        setup::*,
-        explode_bomb::*
-    },
+    system::{explode_bomb::*, movement::move_player_system, scene::*, setup::*},
     TIME_STEP,
 };
 
@@ -18,10 +13,20 @@ fn main() -> Result<(), Report> {
     color_eyre::install()?;
 
     App::new()
+        .insert_resource(WindowDescriptor {
+            title: "Bomberman".to_string(),
+            width: awqward_bomberman::WINDOW_WIDTH,
+            height: awqward_bomberman::WINDOW_HEIGHT,
+            scale_factor_override: Some(4.0),
+            resizable: false,
+            ..default()
+        })
         .add_plugins(DefaultPlugins)
         .add_plugin(bevy::input::InputPlugin)
         .add_plugin(InputManagerPlugin::<Action>::default())
-        .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(16.0))
+        .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(
+            awqward_bomberman::GRID_SIZE,
+        ))
         .add_plugin(RapierDebugRenderPlugin::default())
         .add_startup_system(save_scene_system.exclusive_system())
         .add_startup_system(load_scene_system)
@@ -31,7 +36,7 @@ fn main() -> Result<(), Report> {
             SystemSet::new()
                 .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
                 .with_system(move_player_system)
-                .with_system(explode_bomb)
+                .with_system(explode_bomb),
         )
         .run();
 

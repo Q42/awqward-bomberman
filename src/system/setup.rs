@@ -1,17 +1,22 @@
-use bevy::prelude::*;
-use bevy_rapier2d::{plugin::RapierConfiguration, prelude::{RigidBody, Velocity, Collider, LockedAxes}};
+use bevy::{prelude::*, sprite::Anchor};
+use bevy_rapier2d::{
+    plugin::RapierConfiguration,
+    prelude::{Collider, RigidBody, Velocity, LockedAxes},
+};
 use leafwing_input_manager::InputManagerBundle;
 
 use crate::models::player::{Player, PlayerBundle};
-use crate::models::bomb::{BombBundle};
+use crate::{models::bomb::BombBundle, GRID_SIZE};
 
 #[derive(Component)]
 struct Wall;
 
 const E: usize = 0; // Edge
-const G: usize = 7; // Grass
-const S: usize = 4; // Shaded grass
-const W: usize = 8; // Wall
+const W: usize = 1; // Wall
+const G: usize = 2; // Grass
+const S: usize = 3; // Shaded grass
+
+const BOMB: usize = 4;
 
 pub fn setup(
     mut commands: Commands,
@@ -19,7 +24,7 @@ pub fn setup(
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
     mut rapier_config: ResMut<RapierConfiguration>,
 ) {
-    let texture_handle = asset_server.load("sprites/stage.png");
+    let texture_handle = asset_server.load("sprites/atlas.png");
     let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(16.0, 16.0), 3, 3);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
@@ -30,23 +35,26 @@ pub fn setup(
         [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
         [E, S, S, S, S, S, S, S, S, S, S, S, S, S, E],
         [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, G, G, G, G, G, G, G, G, G, G, G, G, E],
+        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
         [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, G, G, G, G, G, G, G, G, G, G, G, G, E],
+        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
         [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, G, G, G, G, G, G, G, G, G, G, G, G, E],
+        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
         [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, G, G, G, G, G, G, G, G, G, G, G, G, E],
+        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
         [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, G, G, G, G, G, G, G, G, G, G, G, G, E],
+        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
         [E, G, W, G, W, G, W, G, W, G, W, G, W, G, E],
-        [E, G, G, G, G, G, G, G, G, G, G, G, G, G, E],
+        [E, G, S, G, S, G, S, G, S, G, S, G, S, G, E],
         [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
     ];
 
     for (row_index, row) in level.iter().copied().rev().enumerate() {
         for (column_index, column) in row.iter().enumerate() {
-            let wall_position = Vec2::new(column_index as f32 * (16.0), row_index as f32 * (16.0));
+            let wall_position = Vec2::new(
+                ((column_index + 1) as f32 * (GRID_SIZE)) - (crate::WINDOW_WIDTH / 2.0),
+                ((row_index + 1) as f32 * (GRID_SIZE)) - (crate::WINDOW_HEIGHT / 2.0),
+            );
 
             // brick
             commands
@@ -54,7 +62,11 @@ pub fn setup(
                 .insert(Wall)
                 .insert_bundle(SpriteSheetBundle {
                     texture_atlas: texture_atlas_handle.clone(),
-                    sprite: TextureAtlasSprite::new(*column),
+                    sprite: TextureAtlasSprite {
+                        index: *column,
+                        anchor: Anchor::TopRight,
+                        ..default()
+                    },
                     transform: Transform {
                         translation: wall_position.extend(0.0),
                         ..default()
@@ -66,7 +78,9 @@ pub fn setup(
         }
     }
 
-    commands.spawn().insert_bundle(BombBundle::new(texture_atlas_handle.clone()));
+    commands
+        .spawn()
+        .insert_bundle(BombBundle::new(texture_atlas_handle.clone()));
 
     spawn_player(commands, texture_atlas_handle)
 }
@@ -80,17 +94,18 @@ fn spawn_player(mut commands: Commands, atlas: Handle<TextureAtlas>) {
         },
         ..default()
     };
-    
-    commands.spawn_bundle(PlayerBundle {
-        player: Player::One,
-        input_manager: InputManagerBundle {
-            input_map: PlayerBundle::input_map(Player::One, None),
-            ..default()
-        },
-        sprite: player_sprite,
-    })
-    .insert(RigidBody::Fixed)
-    .insert(LockedAxes::ROTATION_LOCKED)
-    .insert(Velocity::zero())
-    .insert(Collider::cuboid(16.0, 16.0));
+
+    commands
+        .spawn_bundle(PlayerBundle {
+            player: Player::One,
+            input_manager: InputManagerBundle {
+                input_map: PlayerBundle::input_map(Player::One, None),
+                ..default()
+            },
+            sprite: player_sprite,
+        })
+        .insert(RigidBody::Dynamic)
+        .insert(LockedAxes::ROTATION_LOCKED)
+        .insert(Velocity::zero())
+        .insert(Collider::ball(GRID_SIZE / 2.0));
 }
