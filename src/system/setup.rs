@@ -2,6 +2,7 @@ use bevy::prelude::*;
 use leafwing_input_manager::InputManagerBundle;
 
 use crate::models::player::{Player, PlayerBundle};
+use crate::models::bomb::{BombBundle};
 
 #[derive(Component)]
 struct Wall;
@@ -59,6 +60,8 @@ pub fn setup(
                 });
         }
     }
+
+    commands.spawn().insert_bundle(BombBundle::new(texture_atlas_handle));
 
     commands.spawn_bundle(PlayerBundle {
         player: Player::One,

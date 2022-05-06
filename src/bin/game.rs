@@ -1,6 +1,6 @@
 use awqward_bomberman::{
     models::player::Action,
-    system::{scene::*, setup},
+    system::{scene::*, setup::*, explode_bomb::*},
     TIME_STEP,
 };
 
@@ -17,8 +17,8 @@ fn main() -> Result<(), Report> {
         .add_plugin(InputManagerPlugin::<Action>::default())
         .add_startup_system(save_scene_system.exclusive_system())
         .add_startup_system(load_scene_system)
-        .add_startup_system(setup::setup)
-        .add_system_set(SystemSet::new().with_run_criteria(FixedTimestep::step(TIME_STEP as f64)))
+        .add_startup_system(setup)
+        .add_system_set(SystemSet::new().with_run_criteria(FixedTimestep::step(TIME_STEP as f64)).with_system(explode_bomb))
         .run();
 
     Ok(())
