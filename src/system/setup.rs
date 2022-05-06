@@ -78,16 +78,37 @@ pub fn setup(
         }
     }
 
-    spawn_player(commands.spawn(), texture_atlas_handle.clone(), Player::One);
-    spawn_player(commands.spawn(), texture_atlas_handle, Player::Two);
+    spawn_player(
+        commands.spawn(),
+        texture_atlas_handle.clone(),
+        Player::One,
+        Vec2::new(
+            (GRID_SIZE * 2.0) - (crate::WINDOW_WIDTH / 2.0) - 8.0,
+            (GRID_SIZE * 2.0) - (crate::WINDOW_HEIGHT / 2.0) - 8.0,
+        ),
+    );
+    spawn_player(
+        commands.spawn(),
+        texture_atlas_handle,
+        Player::Two,
+        Vec2::new(
+            (crate::WINDOW_WIDTH / 2.0) - GRID_SIZE - 8.0,
+            (crate::WINDOW_HEIGHT / 2.0) - GRID_SIZE - 8.0,
+        ),
+    );
 }
 
-fn spawn_player(mut commands: EntityCommands, atlas: Handle<TextureAtlas>, player: Player) {
-    let player_sprite = SpriteSheetBundle {
+fn spawn_player(
+    mut commands: EntityCommands,
+    atlas: Handle<TextureAtlas>,
+    player: Player,
+    position: Vec2,
+) {
+    let sprite = SpriteSheetBundle {
         texture_atlas: atlas,
         sprite: TextureAtlasSprite::new(PLAYER),
         transform: Transform {
-            translation: Vec3::new(0.0, 0.0, LAYER_PLAYER),
+            translation: position.extend(LAYER_PLAYER),
             ..default()
         },
         ..default()
@@ -100,7 +121,7 @@ fn spawn_player(mut commands: EntityCommands, atlas: Handle<TextureAtlas>, playe
                 input_map: PlayerBundle::input_map(player, None),
                 ..default()
             },
-            sprite: player_sprite,
+            sprite,
         })
         .insert(RigidBody::Dynamic)
         .insert(LockedAxes::ROTATION_LOCKED)
