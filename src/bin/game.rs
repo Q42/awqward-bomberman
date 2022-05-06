@@ -1,4 +1,5 @@
 use awqward_bomberman::system::scene::*;
+use awqward_bomberman::system::setup::*;
 
 use bevy::{prelude::*, DefaultPlugins};
 use color_eyre::Report;
@@ -15,12 +16,4 @@ fn main() -> Result<(), Report> {
         .run();
 
     Ok(())
-}
-
-fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
-    commands.spawn_bundle(SpriteBundle {
-        texture: asset_server.load("sprites/bomberman.png"),
-        ..default()
-    });
 }
