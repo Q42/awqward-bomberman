@@ -43,7 +43,7 @@ fn main() -> Result<(), Report> {
                 .with_system(place_bomb)
                 .with_system(explosion_kill)
                 .with_system(explosion_expand)
-                .add_system(explosion_clear),
+                .with_system(explosion_clear),
         )
         .add_system(gamepad_system)
         .run();
