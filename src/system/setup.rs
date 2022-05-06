@@ -4,6 +4,8 @@ use leafwing_input_manager::InputManagerBundle;
 use crate::models::player::{Player, PlayerBundle};
 use crate::models::bomb::{BombBundle};
 
+use super::collision::Collider;
+
 #[derive(Component)]
 struct Wall;
 
@@ -57,25 +59,29 @@ pub fn setup(
                         ..default()
                     },
                     ..default()
-                });
+                })
+                .insert(Collider);
         }
     }
 
     commands.spawn().insert_bundle(BombBundle::new(texture_atlas_handle));
 
+    let player_sprite = SpriteBundle {
+        texture: asset_server.load("sprites/bomber_barbarian.png"),
+        transform: Transform {
+            scale: Vec3::new(0.1, 0.1, 1.0),
+            ..default()
+        },
+        ..default()
+    };
+
     commands.spawn_bundle(PlayerBundle {
         player: Player::One,
         input_manager: InputManagerBundle {
-            input_map: PlayerBundle::input_map(Player::One),
+            input_map: PlayerBundle::input_map(Player::One, None),
             ..default()
         },
-        sprite: SpriteBundle {
-            texture: asset_server.load("sprites/bomber_barbarian.png"),
-            transform: Transform {
-                scale: Vec3::new(0.1, 0.1, 1.0),
-                ..default()
-            },
-            ..default()
-        },
+        collider: Collider,
+        sprite: player_sprite,
     });
 }

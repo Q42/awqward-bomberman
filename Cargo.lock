@@ -180,6 +180,7 @@ name = "awqward-bomberman"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "bevy_math",
  "color-eyre",
  "dotenv",
  "leafwing-input-manager",

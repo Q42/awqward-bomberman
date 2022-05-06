@@ -1,6 +1,12 @@
 use awqward_bomberman::{
     models::player::Action,
-    system::{scene::*, setup::*, explode_bomb::*},
+    system::{
+        collision::{check_for_collisions, CollisionEvent},
+        movement::move_player_system,
+        scene::*,
+        setup::*,
+        explode_bomb::*
+    },
     TIME_STEP,
 };
 
@@ -18,7 +24,14 @@ fn main() -> Result<(), Report> {
         .add_startup_system(save_scene_system.exclusive_system())
         .add_startup_system(load_scene_system)
         .add_startup_system(setup)
-        .add_system_set(SystemSet::new().with_run_criteria(FixedTimestep::step(TIME_STEP as f64)).with_system(explode_bomb))
+        .add_event::<CollisionEvent>()
+        .add_system_set(
+            SystemSet::new()
+                .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
+                .with_system(check_for_collisions)
+                .with_system(move_player_system)
+                .with_system(explode_bomb)
+        )
         .run();
 
     Ok(())
