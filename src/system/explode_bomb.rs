@@ -2,7 +2,7 @@ use crate::models::atlas::Atlas;
 use crate::models::bomb::Bomb;
 use bevy::prelude::*;
 use bevy::sprite::Anchor;
-use bevy_rapier2d::prelude::{RigidBody, Collider, Sensor, ActiveCollisionTypes};
+use bevy_rapier2d::prelude::{RigidBody, Collider, Sensor};
 
 #[derive(Component)]
 pub struct Explosion;
