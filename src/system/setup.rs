@@ -75,7 +75,7 @@ pub fn setup(
     commands.spawn_bundle(PlayerBundle {
         player: Player::One,
         input_manager: InputManagerBundle {
-            input_map: PlayerBundle::input_map(Player::One),
+            input_map: PlayerBundle::input_map(Player::One, None),
             ..default()
         },
         collider: Collider,

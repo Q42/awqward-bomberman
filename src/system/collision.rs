@@ -28,7 +28,7 @@ pub fn check_for_collisions(
             transform.translation,
             transform.scale.truncate(),
         );
-        
+
         if collision.is_some() {
             // Sends a collision event so that other systems can react to the collision
             collision_events.send_default();
