@@ -15,6 +15,7 @@ pub const W: usize = 1; // Wall
 pub const S: usize = 2; // Shaded grass
 pub const G: usize = 3; // Grass
 pub const BOMB: usize = 4;
+pub const PLAYER: usize = 9;
 
 pub const LAYER_BACKGROUND: f32 = 0.0;
 pub const LAYER_ITEMS: f32 = 1.0;

@@ -7,7 +7,7 @@ use leafwing_input_manager::InputManagerBundle;
 
 use crate::models::player::{Player, PlayerBundle};
 use crate::models::atlas::{Atlas};
-use crate::{GRID_SIZE, E, S, W, G, LAYER_PLAYER};
+use crate::{GRID_SIZE, E, S, W, G, PLAYER, LAYER_PLAYER};
 
 #[derive(Component)]
 struct Wall;
@@ -22,7 +22,7 @@ pub fn setup(
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
 
     let texture_handle = asset_server.load("sprites/atlas.png");
-    let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(16.0, 16.0), 5, 2);
+    let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(16.0, 16.0), 9, 3);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
     commands.insert_resource(Atlas { handle: texture_atlas_handle.clone() });
@@ -82,7 +82,7 @@ pub fn setup(
 fn spawn_player(mut commands: Commands, atlas: Handle<TextureAtlas>) {
     let player_sprite = SpriteSheetBundle {
         texture_atlas: atlas,
-        sprite: TextureAtlasSprite::new(5),
+        sprite: TextureAtlasSprite::new(PLAYER),
         transform: Transform { translation: Vec3::new(0.0, 0.0, LAYER_PLAYER), ..default() },
         ..default()
     };
