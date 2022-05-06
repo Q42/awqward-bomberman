@@ -1,6 +1,6 @@
 use awqward_bomberman::{
     models::player::Action,
-    system::{explode_bomb::*, movement::move_player_system, scene::*, setup::*},
+    system::{explode_bomb::*, movement::move_player_system, setup::*},
     TIME_STEP,
 };
 
@@ -28,8 +28,6 @@ fn main() -> Result<(), Report> {
             awqward_bomberman::GRID_SIZE,
         ))
         .add_plugin(RapierDebugRenderPlugin::default())
-        .add_startup_system(save_scene_system.exclusive_system())
-        .add_startup_system(load_scene_system)
         .add_startup_system(setup)
         .add_event::<CollisionEvent>()
         .add_system_set(

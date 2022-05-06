@@ -1,4 +1,3 @@
-pub mod movement;
-pub mod scene;
-pub mod setup;
 pub mod explode_bomb;
+pub mod movement;
+pub mod setup;
