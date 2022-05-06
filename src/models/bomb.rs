@@ -1,4 +1,5 @@
 use bevy::{prelude::*, sprite::Anchor};
+use crate::{BOMB, LAYER_ITEMS};
 
 const INIT_REMAINING_TIME: f32 = 5.0;
 
@@ -25,11 +26,14 @@ impl BombBundle {
                 SpriteSheetBundle {
                     texture_atlas: atlas,
                     sprite: TextureAtlasSprite {
-                        index: 4,
+                        index: BOMB,
                         anchor: Anchor::Center,
                         ..default()
                     },
-                    transform,
+                    transform: Transform {
+                        translation: Vec3::new(transform.translation.x, transform.translation.y, LAYER_ITEMS),
+                        ..transform
+                    },
                     ..default()
                 }
             },
