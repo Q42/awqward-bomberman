@@ -1,5 +1,5 @@
 use awqward_bomberman::{
-    system::{input::keyboard_input_system, scene::*, setup},
+    system::{input::keyboard_input_system, scene::*, setup, collision::{check_for_collisions, CollisionEvent}},
     TIME_STEP,
 };
 
@@ -18,6 +18,12 @@ fn main() -> Result<(), Report> {
             SystemSet::new()
                 .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
                 .with_system(keyboard_input_system),
+        )
+        .add_event::<CollisionEvent>()
+        .add_system_set(
+            SystemSet::new()
+                .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
+                .with_system(check_for_collisions)
         )
         .run();
 
