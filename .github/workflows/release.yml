@@ -21,6 +21,7 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
+          toolchain: 1.60.0
           target: wasm32-unknown-unknown
           override: true
       - uses: jetli/wasm-bindgen-action@v0.1.0
