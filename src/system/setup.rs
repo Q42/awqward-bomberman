@@ -1,16 +1,16 @@
 use bevy::{ecs::system::EntityCommands, prelude::*, sprite::Anchor};
 use bevy_rapier2d::{
     plugin::RapierConfiguration,
-    prelude::{Collider, Friction, LockedAxes, RigidBody, Velocity, ActiveEvents},
+    prelude::{ActiveEvents, Collider, Friction, LockedAxes, RigidBody, Velocity},
 };
 use leafwing_input_manager::InputManagerBundle;
 
-use crate::models::{atlas::Atlas, destructable::Destructable};
 use crate::models::player::{Player, PlayerBundle};
-use crate::{E, G, GRID_SIZE, LAYER_PLAYER, PLAYER, S, W, D};
+use crate::models::{atlas::Atlas, destructable::Destructable};
+use crate::{D, E, G, GRID_SIZE, LAYER_PLAYER, PLAYER, S, W};
 
 #[derive(Component)]
-pub struct Wall;
+pub struct Wall(pub usize);
 
 pub fn setup(
     mut commands: Commands,
@@ -76,7 +76,7 @@ pub fn setup(
 
             if *column != G && *column != S {
                 environment
-                    .insert(Wall)
+                    .insert(Wall(*column))
                     .insert(RigidBody::Fixed)
                     .insert(Collider::cuboid(8.0, 8.0));
             }
