@@ -1,12 +1,9 @@
 use bevy::{ecs::system::EntityCommands, prelude::*, sprite::Anchor};
-use bevy_rapier2d::{
-    plugin::RapierConfiguration,
-    prelude::{ActiveEvents, Collider, Friction, LockedAxes, RigidBody, Velocity},
-};
+use bevy_rapier2d::prelude::*;
 use leafwing_input_manager::InputManagerBundle;
 
-use crate::models::player::{Player, PlayerBundle};
-use crate::models::{atlas::Atlas, destructable::Destructable};
+use crate::model::player::{Player, PlayerBundle};
+use crate::model::{atlas::Atlas, destructable::Destructable};
 use crate::{D, E, G, GRID_SIZE, LAYER_PLAYER, PLAYER, S, W};
 
 #[derive(Component)]
@@ -31,7 +28,7 @@ pub fn setup(
 
     let level = [
         [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-        [E, S, D, S, D, D, D, S, D, D, S, S, D, S, E],
+        [E, S, D, S, D, D, D, S, D, D, S, D, S, S, E],
         [E, D, W, D, W, D, W, D, W, G, W, D, W, G, E],
         [E, D, S, G, S, D, S, D, D, D, D, D, S, D, E],
         [E, D, W, D, W, G, W, D, W, D, W, G, W, G, E],
@@ -54,9 +51,9 @@ pub fn setup(
                 ((row_index) as f32 * (GRID_SIZE) + 8.0) - (crate::WINDOW_HEIGHT / 2.0),
             );
 
-            let mut environment = commands.spawn();
+            let mut entity = commands.spawn();
 
-            environment.insert_bundle(SpriteSheetBundle {
+            entity.insert_bundle(SpriteSheetBundle {
                 texture_atlas: texture_atlas_handle.clone(),
                 sprite: TextureAtlasSprite {
                     index: *column,
@@ -71,11 +68,11 @@ pub fn setup(
             });
 
             if *column == D {
-                environment.insert(Destructable);
+                entity.insert(Destructable);
             }
 
             if *column != G && *column != S {
-                environment
+                entity
                     .insert(Wall(*column))
                     .insert(RigidBody::Fixed)
                     .insert(Collider::cuboid(8.0, 8.0));

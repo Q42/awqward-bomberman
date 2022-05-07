@@ -1,10 +1,9 @@
-use bevy::log::info;
 use bevy::prelude::*;
-use leafwing_input_manager::prelude::ActionState;
+use leafwing_input_manager::prelude::*;
 
-use crate::models::atlas::Atlas;
-use crate::models::bomb::BombBundle;
-use crate::models::player::{Action, Player};
+use crate::model::atlas::Atlas;
+use crate::model::bomb::BombBundle;
+use crate::model::player::{Action, Player};
 
 pub fn place_bomb(
     mut commands: Commands,

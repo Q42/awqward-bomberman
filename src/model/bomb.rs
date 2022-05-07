@@ -1,5 +1,5 @@
-use bevy::{prelude::*, sprite::Anchor};
 use crate::{BOMB, LAYER_ITEMS};
+use bevy::{prelude::*, sprite::Anchor};
 
 const INIT_REMAINING_TIME: f32 = 5.0;
 
@@ -31,7 +31,10 @@ impl BombBundle {
                         ..default()
                     },
                     transform: Transform {
-                        translation: round_transform_to_nearest_multiple_of(16.0, transform.translation),
+                        translation: round_transform_to_nearest_multiple_of(
+                            16.0,
+                            transform.translation,
+                        ),
                         ..transform
                     },
                     ..default()

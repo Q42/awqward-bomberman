@@ -1,4 +1,5 @@
-pub mod models;
+pub mod bundle;
+pub mod model;
 pub mod system;
 
 pub const GRID_SIZE: f32 = 16.0;

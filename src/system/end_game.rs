@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::models::player::Player;
+use crate::model::player::Player;
 
 #[derive(Component)]
 struct FinishText;

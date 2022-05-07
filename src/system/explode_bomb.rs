@@ -1,9 +1,9 @@
-use crate::models::explosion::ExplosionDirection;
-use crate::models::{atlas::Atlas, explosion::Explosion};
-use crate::models::bomb::Bomb;
+use crate::model::atlas::Atlas;
+use crate::model::bomb::Bomb;
+use crate::model::explosion::{Explosion, ExplosionDirection, NEW_EXPLOSION};
 use bevy::prelude::*;
 use bevy::sprite::Anchor;
-use bevy_rapier2d::prelude::{RigidBody, Collider, Sensor};
+use bevy_rapier2d::prelude::*;
 
 #[derive(Bundle)]
 pub struct ExplosionBundle {
@@ -13,9 +13,16 @@ pub struct ExplosionBundle {
 }
 
 impl ExplosionBundle {
-    pub fn new(atlas: Handle<TextureAtlas>, transform: Transform, directions: [ExplosionDirection; 4]) -> ExplosionBundle {
+    pub fn new(
+        atlas: Handle<TextureAtlas>,
+        transform: Transform,
+        directions: [ExplosionDirection; 4],
+    ) -> ExplosionBundle {
         ExplosionBundle {
-            explosion: Explosion(2.0, directions),
+            explosion: Explosion {
+                timer: 2.0,
+                directions,
+            },
             sprite_sheet: {
                 SpriteSheetBundle {
                     texture_atlas: atlas,
@@ -42,10 +49,15 @@ pub fn explode_bomb(
         bomb.remaining_time -= time.delta().as_secs_f32();
 
         if bomb.remaining_time <= 0.0 {
-            use ExplosionDirection::*;
             commands.entity(entity).despawn();
-            commands.spawn()
-                .insert_bundle(ExplosionBundle::new(atlas.handle.clone(), *transform, [Up, Down, Left, Right]))
+            info!("Bomb exploded!");
+            commands
+                .spawn()
+                .insert_bundle(ExplosionBundle::new(
+                    atlas.handle.clone(),
+                    *transform,
+                    NEW_EXPLOSION,
+                ))
                 .insert(RigidBody::Dynamic)
                 .insert(Collider::cuboid(6.0, 6.0))
                 .insert(Sensor(true));

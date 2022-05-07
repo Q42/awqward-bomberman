@@ -1,7 +1,4 @@
-use crate::{
-    models::player::Action,
-    models::player::{self, Player},
-};
+use crate::model::player::{Action, Player, SPEED};
 
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::Velocity;
@@ -31,6 +28,6 @@ pub fn move_player_system(mut query: Query<(&ActionState<Action>, &mut Velocity)
 
         // Update the velocity on the rigid_body_component,
         // the bevy_rapier plugin will update the Sprite transform.
-        velocity.linvel = delta * player::SPEED;
+        velocity.linvel = delta * SPEED;
     }
 }

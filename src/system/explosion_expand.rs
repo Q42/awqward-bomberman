@@ -1,57 +1,91 @@
-use bevy::prelude::Transform;
-use bevy::prelude::{Res, Query, Commands};
+use bevy::ecs::system::EntityCommands;
+use bevy::prelude::*;
 use bevy_math::Vec3;
-use bevy_rapier2d::prelude::Collider;
-use bevy_rapier2d::prelude::RigidBody;
-use bevy_rapier2d::prelude::Sensor;
+use bevy_rapier2d::prelude::*;
 
-use crate::models::atlas::Atlas;
-use crate::models::explosion::ExplosionDirection;
-use crate::models::explosion::Explosion;
+use crate::model::atlas::Atlas;
+use crate::model::explosion::ExplosionDirection;
+use crate::model::explosion::{Explosion, FINISHED_EXPLOSION};
 use crate::system::explode_bomb::ExplosionBundle;
+use crate::GRID_SIZE;
 
-pub fn explosion_expand(mut commands: Commands, atlas: Res<Atlas>, mut explosion_query: Query<(&mut Explosion, &Transform)>) {
+fn spawn_explosion_at(
+    mut commands: EntityCommands,
+    handle: Handle<TextureAtlas>,
+    transform: Transform,
+    direction: ExplosionDirection,
+) {
+    use ExplosionDirection::*;
+    commands
+        .insert_bundle(ExplosionBundle::new(
+            handle,
+            transform,
+            [direction, None, None, None],
+        ))
+        .insert(RigidBody::Dynamic)
+        .insert(Collider::cuboid(6.0, 6.0))
+        .insert(Sensor(true));
+}
+
+fn translate(transform: &Transform, inc_x: f32, inc_y: f32) -> Transform {
+    transform.with_translation(Vec3::new(
+        transform.translation.x + inc_x,
+        transform.translation.y + inc_y,
+        0.0,
+    ))
+}
+
+pub fn explosion_expand(
+    mut commands: Commands,
+    atlas: Res<Atlas>,
+    mut explosion_query: Query<(&mut Explosion, &Transform)>,
+) {
     for (mut explosion, transform) in explosion_query.iter_mut() {
-        use ExplosionDirection::*;
-        if explosion.1[0] == None && explosion.1[1] == None && explosion.1[2] == None && explosion.1[3] == None {
+        if explosion.directions == FINISHED_EXPLOSION {
             continue;
         }
 
-        for direction in explosion.1.iter() {
-            use ExplosionDirection::*;
+        for direction in explosion.directions.iter() {
+            if *direction != ExplosionDirection::None {
+                info!("Expanding bomb towards {:?}", direction);
+            }
             match direction {
-                Up => {
-                    commands.spawn()
-                    .insert_bundle(ExplosionBundle::new(atlas.handle.clone(), transform.with_translation(Vec3::new(transform.translation.x, transform.translation.y + 16.0, 0.0)), [Up, None, None, None]))
-                    .insert(RigidBody::Dynamic)
-                    .insert(Collider::cuboid(6.0, 6.0))
-                    .insert(Sensor(true));
+                ExplosionDirection::Up => {
+                    spawn_explosion_at(
+                        commands.spawn(),
+                        atlas.handle.clone(),
+                        translate(transform, 0.0, GRID_SIZE),
+                        *direction,
+                    );
                 }
-                Down => {
-                    commands.spawn()
-                    .insert_bundle(ExplosionBundle::new(atlas.handle.clone(), transform.with_translation(Vec3::new(transform.translation.x, transform.translation.y - 16.0, 0.0)), [Down, None, None, None]))
-                    .insert(RigidBody::Dynamic)
-                    .insert(Collider::cuboid(6.0, 6.0))
-                    .insert(Sensor(true));
+                ExplosionDirection::Down => {
+                    spawn_explosion_at(
+                        commands.spawn(),
+                        atlas.handle.clone(),
+                        translate(transform, 0.0, -GRID_SIZE),
+                        *direction,
+                    );
                 }
-                Left => {
-                    commands.spawn()
-                    .insert_bundle(ExplosionBundle::new(atlas.handle.clone(), transform.with_translation(Vec3::new(transform.translation.x - 16.0, transform.translation.y, 0.0)), [Left, None, None, None]))
-                    .insert(RigidBody::Dynamic)
-                    .insert(Collider::cuboid(6.0, 6.0))
-                    .insert(Sensor(true));
+                ExplosionDirection::Left => {
+                    spawn_explosion_at(
+                        commands.spawn(),
+                        atlas.handle.clone(),
+                        translate(transform, -GRID_SIZE, 0.0),
+                        *direction,
+                    );
                 }
-                Right => {
-                    commands.spawn()
-                    .insert_bundle(ExplosionBundle::new(atlas.handle.clone(), transform.with_translation(Vec3::new(transform.translation.x + 16.0, transform.translation.y, 0.0)), [Right, None, None, None]))
-                    .insert(RigidBody::Dynamic)
-                    .insert(Collider::cuboid(6.0, 6.0))
-                    .insert(Sensor(true));
+                ExplosionDirection::Right => {
+                    spawn_explosion_at(
+                        commands.spawn(),
+                        atlas.handle.clone(),
+                        translate(transform, GRID_SIZE, 0.0),
+                        *direction,
+                    );
                 }
-                None => { /* Do nothing */ }
+                _ => {}
             }
         }
-        
-        explosion.1 = [None, None, None, None]
+
+        explosion.directions = FINISHED_EXPLOSION
     }
 }

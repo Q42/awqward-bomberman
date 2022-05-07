@@ -1,9 +1,8 @@
 use awqward_bomberman::{
-    models::player::Action,
+    model::player::Action,
     system::{
         end_game, explode_bomb::*, explosion_clear::*, explosion_expand::*, explosion_kill::*,
-        explosion_stop_expand::*, gamepad::gamepad_system, movement::move_player_system,
-        place_bomb::*, setup::*,
+        explosion_stop_expand::*, movement, place_bomb, setup::*,
     },
     TIME_STEP,
 };
@@ -24,7 +23,7 @@ fn main() -> Result<(), Report> {
             width: awqward_bomberman::WINDOW_WIDTH,
             height: awqward_bomberman::WINDOW_HEIGHT,
             scale_factor_override: Some(4.0),
-            resizable: false,
+            resizable: cfg!(debug_assertions),
             ..default()
         })
         .add_plugins(DefaultPlugins)
@@ -39,16 +38,18 @@ fn main() -> Result<(), Report> {
         .add_system_set(
             SystemSet::new()
                 .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
-                .with_system(move_player_system)
-                .with_system(explode_bomb)
-                .with_system(explosion_stop_expand.after(explode_bomb))
-                .with_system(explosion_expand.after(explosion_stop_expand))
-                .with_system(explosion_kill.after(explosion_expand))
-                .with_system(explosion_clear.after(explosion_stop_expand))
-                .with_system(place_bomb)
+                .with_system(movement::move_player_system)
+                .with_system(place_bomb::place_bomb)
                 .with_system(end_game::end_game),
         )
-        .add_system(gamepad_system)
+        .add_system_set(
+            SystemSet::new()
+                .with_system(explode_bomb)
+                .with_system(explosion_clear.after(explode_bomb))
+                .with_system(explosion_stop_expand.after(explosion_clear))
+                .with_system(explosion_expand.after(explosion_stop_expand))
+                .with_system(explosion_kill.after(explosion_expand)),
+        )
         .run();
 
     Ok(())
