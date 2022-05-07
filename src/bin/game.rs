@@ -27,12 +27,10 @@ fn main() -> Result<(), Report> {
             ..default()
         })
         .add_plugins(DefaultPlugins)
-        .add_plugin(bevy::input::InputPlugin)
         .add_plugin(InputManagerPlugin::<Action>::default())
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(
             awqward_bomberman::GRID_SIZE,
         ))
-        .add_plugin(RapierDebugRenderPlugin::default())
         .add_startup_system(setup)
         .add_event::<CollisionEvent>()
         .add_system_set(
