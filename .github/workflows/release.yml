@@ -32,11 +32,11 @@ jobs:
           command: build
           args: --release --target wasm32-unknown-unknown
       - run: wasm-bindgen --out-dir "./out/" --target web "./target/wasm32-unknown-unknown/release/game.wasm"
-      - run: cp -r assets web/
-      - run: cp out/game_bg.wasm out/game.js web/
+      - run: cp -r assets docs/
+      - run: cp out/game_bg.wasm out/game.js docs/
       - uses: EndBug/add-and-commit@v9
         with:
-          add: "web"
+          add: "docs"
           default_author: github_actions
           new_branch: gh-pages
           push: "--force origin gh-pages"
