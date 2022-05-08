@@ -18,10 +18,15 @@ pub const G: usize = 3; // Grass
 pub const D: usize = 5; // Destructable
 pub const BOMB: usize = 4;
 pub const PLAYER: usize = 9;
+pub const EXPLOSION_CENTER: usize = 18;
+pub const EXPLOSION_HORIZONTAL: usize = 19;
+pub const EXPLOSION_END_LEFT: usize = 20;
+pub const EXPLOSION_END_RIGHT: usize = 22;
 
 pub const LAYER_BACKGROUND: f32 = 0.0;
 pub const LAYER_ITEMS: f32 = 1.0;
-pub const LAYER_PLAYER: f32 = 2.0;
+pub const LAYER_WALLS: f32 = 2.0;
+pub const LAYER_PLAYER: f32 = 3.0;
 
 #[cfg(test)]
 mod tests {

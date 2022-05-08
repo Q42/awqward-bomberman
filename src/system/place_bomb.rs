@@ -12,7 +12,6 @@ pub fn place_bomb(
 ) {
     for (action_state, transform) in query.iter_mut() {
         if action_state.just_pressed(Action::PlaceBomb) {
-            info!("Place bomb");
             commands
                 .spawn()
                 .insert_bundle(BombBundle::new(atlas.handle.clone(), *transform));

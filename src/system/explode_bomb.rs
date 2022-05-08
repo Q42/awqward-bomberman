@@ -1,3 +1,4 @@
+use crate::EXPLOSION_CENTER;
 use crate::model::atlas::Atlas;
 use crate::model::bomb::Bomb;
 use crate::model::explosion::{Explosion, ExplosionDirection, NEW_EXPLOSION};
@@ -20,14 +21,14 @@ impl ExplosionBundle {
     ) -> ExplosionBundle {
         ExplosionBundle {
             explosion: Explosion {
-                timer: 2.0,
+                timer: 1.0,
                 directions,
             },
             sprite_sheet: {
                 SpriteSheetBundle {
                     texture_atlas: atlas,
                     sprite: TextureAtlasSprite {
-                        index: 18,
+                        index: EXPLOSION_CENTER,
                         anchor: Anchor::Center,
                         ..default()
                     },
@@ -50,7 +51,6 @@ pub fn explode_bomb(
 
         if bomb.remaining_time <= 0.0 {
             commands.entity(entity).despawn();
-            info!("Bomb exploded!");
             commands
                 .spawn()
                 .insert_bundle(ExplosionBundle::new(

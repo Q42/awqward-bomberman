@@ -4,7 +4,7 @@ use leafwing_input_manager::InputManagerBundle;
 
 use crate::model::player::{Player, PlayerBundle};
 use crate::model::{atlas::Atlas, destructable::Destructable};
-use crate::{D, E, G, GRID_SIZE, LAYER_PLAYER, PLAYER, S, W};
+use crate::{D, E, G, GRID_SIZE, LAYER_PLAYER, PLAYER, S, W, LAYER_BACKGROUND, LAYER_WALLS};
 
 #[derive(Component)]
 pub struct Wall(pub usize);
@@ -46,9 +46,10 @@ pub fn setup(
 
     for (row_index, row) in level.iter().copied().rev().enumerate() {
         for (column_index, column) in row.iter().enumerate() {
-            let environment_position = Vec2::new(
+            let environment_position = Vec3::new(
                 ((column_index) as f32 * (GRID_SIZE) + 8.0) - (crate::WINDOW_WIDTH / 2.0),
                 ((row_index) as f32 * (GRID_SIZE) + 8.0) - (crate::WINDOW_HEIGHT / 2.0),
+                if *column != G && *column != S && *column != D { LAYER_WALLS } else { LAYER_BACKGROUND },
             );
 
             let mut entity = commands.spawn();
@@ -61,7 +62,7 @@ pub fn setup(
                     ..default()
                 },
                 transform: Transform {
-                    translation: environment_position.extend(0.0),
+                    translation: environment_position,
                     ..default()
                 },
                 ..default()

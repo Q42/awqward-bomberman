@@ -18,7 +18,6 @@ pub fn explosion_stop_expand(
             if rapier_context.intersection_pair(wall_entity, explosion_entity) == Some(true) {
                 // If the wall type is a destructable wall, then we need to destroy it.
                 if wall.0 == D {
-                    info!("Destroying destructible wall");
                     wall.0 = G;
                     texture_atlas.index = G;
                     commands
@@ -30,7 +29,6 @@ pub fn explosion_stop_expand(
                 }
 
                 // Remove the explosion when we collide with a wall, then we will not expand further!
-                info!("Explosion finished");
                 explosion.directions = FINISHED_EXPLOSION;
             }
         }

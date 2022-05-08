@@ -1,7 +1,7 @@
-use crate::{BOMB, LAYER_ITEMS};
+use crate::{BOMB, LAYER_WALLS};
 use bevy::{prelude::*, sprite::Anchor};
 
-const INIT_REMAINING_TIME: f32 = 5.0;
+const INIT_REMAINING_TIME: f32 = 3.5;
 
 #[derive(Component)]
 pub struct Bomb {
@@ -47,5 +47,5 @@ impl BombBundle {
 fn round_transform_to_nearest_multiple_of(multiple: f32, translation: Vec3) -> Vec3 {
     let x = ((translation.x - 8.0) / multiple).ceil() * multiple;
     let y = ((translation.y - 8.0) / multiple).ceil() * multiple;
-    Vec3::new(x, y, LAYER_ITEMS)
+    Vec3::new(x, y, LAYER_WALLS)
 }

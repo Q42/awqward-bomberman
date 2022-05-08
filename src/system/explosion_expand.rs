@@ -8,6 +8,7 @@ use crate::model::explosion::ExplosionDirection;
 use crate::model::explosion::{Explosion, FINISHED_EXPLOSION};
 use crate::system::explode_bomb::ExplosionBundle;
 use crate::GRID_SIZE;
+use crate::LAYER_ITEMS;
 
 fn spawn_explosion_at(
     mut commands: EntityCommands,
@@ -31,7 +32,7 @@ fn translate(transform: &Transform, inc_x: f32, inc_y: f32) -> Transform {
     transform.with_translation(Vec3::new(
         transform.translation.x + inc_x,
         transform.translation.y + inc_y,
-        0.0,
+        LAYER_ITEMS,
     ))
 }
 
@@ -46,9 +47,6 @@ pub fn explosion_expand(
         }
 
         for direction in explosion.directions.iter() {
-            if *direction != ExplosionDirection::None {
-                info!("Expanding bomb towards {:?}", direction);
-            }
             match direction {
                 ExplosionDirection::Up => {
                     spawn_explosion_at(
