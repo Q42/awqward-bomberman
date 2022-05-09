@@ -45,7 +45,7 @@ fn explosion_sprite_index(directions: [ExplosionDirection; 4]) -> usize {
     match directions {
         [Left, None, None, None] | [Right, None, None, None] => EXPLOSION_HORIZONTAL,
         [Up, None, None, None] | [Down, None, None, None] => EXPLOSION_VERTICAL,
-        _ => EXPLOSION_CENTER
+        _ => EXPLOSION_CENTER,
     }
 }
 
