@@ -4,7 +4,7 @@ use leafwing_input_manager::InputManagerBundle;
 
 use crate::model::player::{Player, PlayerBundle};
 use crate::model::{atlas::Atlas, destructable::Destructable};
-use crate::{D, E, G, GRID_SIZE, LAYER_PLAYER, PLAYER, S, W, LAYER_BACKGROUND, LAYER_WALLS};
+use crate::{D, E, G, GRID_SIZE, LAYER_BACKGROUND, LAYER_PLAYER, LAYER_WALLS, PLAYER, S, W};
 
 #[derive(Component)]
 pub struct Wall(pub usize);
@@ -49,7 +49,11 @@ pub fn setup(
             let environment_position = Vec3::new(
                 ((column_index) as f32 * (GRID_SIZE) + 8.0) - (crate::WINDOW_WIDTH / 2.0),
                 ((row_index) as f32 * (GRID_SIZE) + 8.0) - (crate::WINDOW_HEIGHT / 2.0),
-                if *column != G && *column != S && *column != D { LAYER_WALLS } else { LAYER_BACKGROUND },
+                if *column != G && *column != S && *column != D {
+                    LAYER_WALLS
+                } else {
+                    LAYER_BACKGROUND
+                },
             );
 
             let mut entity = commands.spawn();

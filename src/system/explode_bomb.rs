@@ -1,7 +1,7 @@
-use crate::EXPLOSION_CENTER;
 use crate::model::atlas::Atlas;
 use crate::model::bomb::Bomb;
 use crate::model::explosion::{Explosion, ExplosionDirection, NEW_EXPLOSION};
+use crate::EXPLOSION_CENTER;
 use bevy::prelude::*;
 use bevy::sprite::Anchor;
 use bevy_rapier2d::prelude::*;

@@ -27,6 +27,7 @@ pub const LAYER_BACKGROUND: f32 = 0.0;
 pub const LAYER_ITEMS: f32 = 1.0;
 pub const LAYER_WALLS: f32 = 2.0;
 pub const LAYER_PLAYER: f32 = 3.0;
+pub const LAYER_TEXT: f32 = 4.0;
 
 #[cfg(test)]
 mod tests {
