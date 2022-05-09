@@ -13,27 +13,51 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1
+        id: toolchain
         with:
           profile: minimal
           toolchain: 1.60.0
           override: true
+          target: wasm32-unknown-unknown
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-${{ steps.toolchain.outputs.rustc_hash }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions-rs/cargo@v1
         with:
           command: check
+          args: --target wasm32-unknown-unknown
 
-  test:
-    name: Test Suite
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: 1.60.0
-          override: true
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
+  # test:
+  #   name: Test Suite
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions-rs/toolchain@v1
+  #       id: toolchain
+  #       with:
+  #         profile: minimal
+  #         toolchain: 1.60.0
+  #         override: true
+  #         target: wasm32-unknown-unknown
+  #     - uses: actions/cache@v3
+  #       with:
+  #         path: |
+  #           ~/.cargo/bin/
+  #           ~/.cargo/registry/index/
+  #           ~/.cargo/registry/cache/
+  #           ~/.cargo/git/db/
+  #           target/
+  #         key: ${{ runner.os }}-${{ steps.toolchain.outputs.rustc_hash }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+  #     - uses: actions-rs/cargo@v1
+  #       with:
+  #         command: test
+  #         args: --target wasm32-unknown-unknown --lib
 
   fmt:
     name: Rustfmt
@@ -41,6 +65,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1
+        id: toolchain
         with:
           profile: minimal
           toolchain: 1.60.0
@@ -57,12 +82,23 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1
+        id: toolchain
         with:
           profile: minimal
           toolchain: 1.60.0
           override: true
           components: clippy
+          target: wasm32-unknown-unknown
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-${{ steps.toolchain.outputs.rustc_hash }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: -- -D warnings
+          args: --target wasm32-unknown-unknown -- -D warnings
