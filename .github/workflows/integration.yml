@@ -33,31 +33,31 @@ jobs:
           command: check
           args: --target wasm32-unknown-unknown
 
-  test:
-    name: Test Suite
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
-        id: toolchain
-        with:
-          profile: minimal
-          toolchain: 1.60.0
-          override: true
-          target: wasm32-unknown-unknown
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-${{ steps.toolchain.outputs.rustc_hash }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --target wasm32-unknown-unknown --lib
+  # test:
+  #   name: Test Suite
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions-rs/toolchain@v1
+  #       id: toolchain
+  #       with:
+  #         profile: minimal
+  #         toolchain: 1.60.0
+  #         override: true
+  #         target: wasm32-unknown-unknown
+  #     - uses: actions/cache@v3
+  #       with:
+  #         path: |
+  #           ~/.cargo/bin/
+  #           ~/.cargo/registry/index/
+  #           ~/.cargo/registry/cache/
+  #           ~/.cargo/git/db/
+  #           target/
+  #         key: ${{ runner.os }}-${{ steps.toolchain.outputs.rustc_hash }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+  #     - uses: actions-rs/cargo@v1
+  #       with:
+  #         command: test
+  #         args: --target wasm32-unknown-unknown --lib
 
   fmt:
     name: Rustfmt
