@@ -1,4 +1,4 @@
-use crate::EXPLOSION_CENTER;
+use crate::{EXPLOSION_CENTER, EXPLOSION_HORIZONTAL, EXPLOSION_VERTICAL};
 use crate::model::atlas::Atlas;
 use crate::model::bomb::Bomb;
 use crate::model::explosion::{Explosion, ExplosionDirection, NEW_EXPLOSION};
@@ -28,7 +28,7 @@ impl ExplosionBundle {
                 SpriteSheetBundle {
                     texture_atlas: atlas,
                     sprite: TextureAtlasSprite {
-                        index: EXPLOSION_CENTER,
+                        index: explosion_sprite_index(directions),
                         anchor: Anchor::Center,
                         ..default()
                     },
@@ -37,6 +37,15 @@ impl ExplosionBundle {
                 }
             },
         }
+    }
+}
+
+fn explosion_sprite_index(directions: [ExplosionDirection; 4]) -> usize {
+    use crate::model::explosion::ExplosionDirection::*;
+    match directions {
+        [Left, None, None, None] | [Right, None, None, None] => EXPLOSION_HORIZONTAL,
+        [Up, None, None, None] | [Down, None, None, None] => EXPLOSION_VERTICAL,
+        _ => EXPLOSION_CENTER
     }
 }
 
