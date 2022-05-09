@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::model::player::Player;
+use crate::{model::player::Player, LAYER_TEXT};
 
 #[derive(Component)]
 struct FinishText;
@@ -26,11 +26,15 @@ pub fn end_game(
                 },
                 TextStyle {
                     font,
-                    font_size: 60.0,
+                    font_size: 40.0,
                     color: Color::WHITE,
                 },
-                Default::default(),
+                TextAlignment {
+                    vertical: VerticalAlign::Center,
+                    horizontal: HorizontalAlign::Center,
+                },
             ),
+            transform: Transform::from_translation(Vec3::new(0.0, 0.0, LAYER_TEXT)),
             ..default()
         })
         .insert(FinishText);
