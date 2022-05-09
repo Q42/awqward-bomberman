@@ -23,8 +23,9 @@ pub const EXPLOSION_HORIZONTAL: usize = 19;
 pub const EXPLOSION_END_LEFT: usize = 20;
 pub const EXPLOSION_END_RIGHT: usize = 22;
 pub const EXPLOSION_VERTICAL: usize = 23;
-pub const EXPLOSION_END_TOP: usize = 24;
-pub const EXPLOSION_END_BOTTOM: usize = 25;
+pub const EXPLOSION_END_UP: usize = 24;
+// Another vertical in the atlas here? 25
+pub const EXPLOSION_END_DOWN: usize = 26;
 
 pub const LAYER_BACKGROUND: f32 = 0.0;
 pub const LAYER_ITEMS: f32 = 1.0;
